@@ -920,9 +920,9 @@ The data model for the representation MUST conform to [JSON][30]. The values may
 
 * Key names MUST camel cased words.
     * `foo`
-    * `bar_baz`
-* Prefix such as `is_` or `has_` SHOULD NOT be used for keys of type boolean. 
-* Fields that represent arrays SHOULD be named using plural nouns (e.g. authenticators-contains one or more authenticators, products-contains one or more products).  
+    * `barBaz`
+* Prefix such as `is` or `has` SHOULD NOT be used for keys of type boolean. 
+* Fields that represent arrays SHOULD be named using plural nouns (e.g. authenticators-contains one or more authenticators, products-contains one or more products). 
 
 <h2 id="enum-names">Enum Names</h2>
 
