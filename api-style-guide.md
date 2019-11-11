@@ -1,6 +1,5 @@
 # API Design Guidelines
 
-
 # Introduction
 
 The PayPal platform is a collection of reusable services that encapsulate well-defined business capabilities. Developers are encouraged to access these capabilities through Application Programming Interfaces (APIs) that enable consistent design patterns and principles. This facilitates a great developer experience and the ability to quickly compose complex business processes by combining multiple, complementary capabilities as building blocks.
@@ -19,7 +18,6 @@ Machine-readable text, such as URLs, HTTP verbs, and source code, are represente
 
 URIs containing variable blocks are specified according to [URI Template RFC 6570](https://tools.ietf.org/html/rfc6570). For example, a URL containing a variable called account_id would be shown as https://foo.com/accounts/{account_id}/.
 
-
 HTTP headers are written in camelCase + hyphenated syntax, e.g. Foo-Request-Id.
 
 ### Contributors
@@ -29,83 +27,83 @@ HTTP headers are written in camelCase + hyphenated syntax, e.g. Foo-Request-Id.
 # Table Of Contents
 
 * [Interpreting the Guidelines](#interpretation)
-    * [Terms Used](#terms)
+  * [Terms Used](#terms)
 * [Service Design Principles](#service-design-principles)
-    * [Loose Coupling](#loose_coupling)
-    * [Encapsulation](#encapsulation)
-    * [Stability](#stability)
-    * [Reusable](#reusable)
-    * [Contract-based](#contract-based)
-    * [Consistency](#consistency)
-    * [Ease of Use](#ease-of-use)
-    * [Externalizable](#externalizable)
+  * [Loose Coupling](#loose_coupling)
+  * [Encapsulation](#encapsulation)
+  * [Stability](#stability)
+  * [Reusable](#reusable)
+  * [Contract-based](#contract-based)
+  * [Consistency](#consistency)
+  * [Ease of Use](#ease-of-use)
+  * [Externalizable](#externalizable)
 * [HTTP Methods, Headers and Statuses](#http-methods-headers-status)
-    * [Data Resources/HTTP Methods](#data-resources)
-	   * [Business Capabilities and Resource Modeling](#business-capabilities)
-	   * [HTTP Methods](#http-methods)
-	   * [Processing](#processing)
-    * [HTTP Headers](#http-headers)
-	   * [Assumptions](#assumptions)
-	   * [HTTP Standard Headers](#http-standard-headers)
-	   * [HTTP Custom Headers](#http-custom-headers)
-	   * [HTTP Header Propagation](#http-header-propagation)
-    * [HTTP Status Codes](#http-status-codes)
-	   * [Status Code Ranges](#status-code-ranges)
-	   * [Status Reporting](#status-reporting)
-	   * [Allowed Status Codes List](#allowed-status-codes)
-	   * [HTTP Method to Status Code Mapping](#mapping)
+  * [Data Resources/HTTP Methods](#data-resources)
+    * [Business Capabilities and Resource Modeling](#business-capabilities)
+    * [HTTP Methods](#http-methods)
+    * [Processing](#processing)
+  * [HTTP Headers](#http-headers)
+    * [Assumptions](#assumptions)
+    * [HTTP Standard Headers](#http-standard-headers)
+    * [HTTP Custom Headers](#http-custom-headers)
+    * [HTTP Header Propagation](#http-header-propagation)
+  * [HTTP Status Codes](#http-status-codes)
+    * [Status Code Ranges](#status-code-ranges)
+    * [Status Reporting](#status-reporting)
+    * [Allowed Status Codes List](#allowed-status-codes)
+    * [HTTP Method to Status Code Mapping](#mapping)
 * [Hypermedia](#hypermedia)
-    * [HATEOAS](#hateoas)  
-    * [Hypermedia Compliant API](#hateoas-api)
-    * [Link Description Object](#link-description-object)
-    * [Links Array](#links-array)
-    * [Link Relation Type](#link-relation-type)
-    * [Use Cases](#use-cases)
+  * [HATEOAS](#hateoas)  
+  * [Hypermedia Compliant API](#hateoas-api)
+  * [Link Description Object](#link-description-object)
+  * [Links Array](#links-array)
+  * [Link Relation Type](#link-relation-type)
+  * [Use Cases](#use-cases)
 * [Naming Conventions](#naming-conventions)
-    * [URI Component Names](#uri-component-names)
-    * [Field Names](#field-names)
-    * [Enum Names](#enum-names)
-    * [Link Relation Names](#link-relation-names) 
-    * [File Names](#file-names)
+  * [URI Component Names](#uri-component-names)
+  * [Field Names](#field-names)
+  * [Enum Names](#enum-names)
+  * [Link Relation Names](#link-relation-names) 
+  * [File Names](#file-names)
 * [URI](#uri)
-    * [Resource Path](#resource-path)
-    * [Query Parameters](#query-parameters)   
+  * [Resource Path](#resource-path)
+  * [Query Parameters](#query-parameters)   
 * [JSON Schema](#json-schema)
-    * [API Contract Description](#api-contract-description)
-    * [$schema](#schema)
-    * [Migration From draft-03](#migration-from-draft03)
-    * [Advanced Syntax draft-04](#advanced-syntax-draft04)
+  * [API Contract Description](#api-contract-description)
+  * [$schema](#schema)
+  * [Migration From draft-03](#migration-from-draft03)
+  * [Advanced Syntax draft-04](#advanced-syntax-draft04)
 * [JSON Types](#json-types)
-    * [JSON Primitive Types](#json-primitive)
-	   * [String](#string)
-	   * [Enumeration](#enum)
-	   * [Number](#number)
-	   * [Array](#array)
-	   * [Null](#null)
-	   * [Additional Properties](#additional-properties)
-    * [Common Types](#common-types)
-        * [Address](#address)
-        * [Money](#money)
-     * [Percentage, Interest Rate, or APR](#apr)
-        * [Internationalization](#internationalization)
-        * [Date,Time and Timezone](#date-time)
-        * [Formats](#formats)
+  * [JSON Primitive Types](#json-primitive)
+    * [String](#string)
+    * [Enumeration](#enum)
+    * [Number](#number)
+    * [Array](#array)
+    * [Null](#null)
+    * [Additional Properties](#additional-properties)
+  * [Common Types](#common-types)
+    * [Address](#address)
+    * [Money](#money)
+    * [Percentage, Interest Rate, or APR](#apr)
+    * [Internationalization](#internationalization)
+    * [Date,Time and Timezone](#date-time)
+    * [Formats](#formats)
 * [Error Handling](#error-handling)
-    * [Error Schema](#error-schema)
-    * [Error Samples](#error-samples)
-    * [Error Declaration In API Specification](#error-declaration)
-    * [Samples With Error Scenarios In Documentation](#userguide-errors)
-    * [Error Catalog](#error-catalog)
+  * [Error Schema](#error-schema)
+  * [Error Samples](#error-samples)
+  * [Error Declaration In API Specification](#error-declaration)
+  * [Samples With Error Scenarios In Documentation](#userguide-errors)
+  * [Error Catalog](#error-catalog)
 * [API Versioning](#api-versioning)
-    * [API Lifecycle](#api-lifecycle)
-    * [API Versioning Policy](#api-versioning-policy)
-    * [Backwards Compatibility](#backwards-compatibility)
-    * [End of Life Policy](#eol-policy)
+  * [API Lifecycle](#api-lifecycle)
+  * [API Versioning Policy](#api-versioning-policy)
+  * [Backwards Compatibility](#backwards-compatibility)
+  * [End of Life Policy](#eol-policy)
 * [Deprecation](#deprecation)
-    * [Terms Used](#deprecation-terms-used)
-    * [Background](#deprecation-background)
-    * [Requirements](#deprecation-requirements)
-    * [Solution](#deprecation-solution)
+  * [Terms Used](#deprecation-terms-used)
+  * [Background](#deprecation-background)
+  * [Requirements](#deprecation-requirements)
+  * [Solution](#deprecation-solution)
 * [Patterns And Use Cases](#patterns-and-use-cases)
 * [References](references.md)
 
@@ -115,7 +113,7 @@ HTTP headers are written in camelCase + hyphenated syntax, e.g. Foo-Request-Id.
 
 <h4 id="resource">Resource</h4>
 
-The key abstraction of information in REST is a resource. According to [Fielding's dissertation section 5.2](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_2), any information that can be named can be a resource: a document or image, a temporal service (e.g. "today's weather in Los Angeles"), a collection of other resources, a non-virtual object (e.g. a person), and so on. A resource is a conceptual mapping to a set of entities, not the entity that corresponds to the mapping at any particular point in time. More precisely, a resource R is a temporally varying membership function `MR(t)`, that for time `t` maps to a set of entities, or values, that are equivalent. The values in the set may be resource representations and/or resource identifiers. 
+The key abstraction of information in REST is a resource. According to [Fielding's dissertation section 5.2](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_2), any information that can be named can be a resource: a document or image, a temporal service (e.g. "today's weather in Los Angeles"), a collection of other resources, a non-virtual object (e.g. a person), and so on. A resource is a conceptual mapping to a set of entities, not the entity that corresponds to the mapping at any particular point in time. More precisely, a resource R is a temporally varying membership function `MR(t)`, that for time `t` maps to a set of entities, or values, that are equivalent. The values in the set may be resource representations and/or resource identifiers.
 
 A resource can also map to the empty set, that allows references to be made to a concept before any realization of that concept exists.
 
@@ -126,7 +124,6 @@ REST uses a resource identifier to identify the particular resource instance inv
 <h4 id="representation">Representation</h4>
 
 REST components perform actions on a resource by using a representation to capture the current or intended state of that resource and by transferring that representation between components. A representation is a sequence of bytes, plus representation metadata to describe those bytes - [Fielding dissertation section 5.2](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm#sec_5_2).
-
 
 <h4 id="domain">Domain</h4>
 
@@ -140,19 +137,18 @@ Capabilities drive the interface, while domains are more coarse-grained and clos
 
 <h4 id="namespace">Namespace</h4>
 
-Capabilities drive service modeling and namespace concerns in an API portfolio. Namespaces are part of the Business Capability Model. Examples of namespace are: compliance, devices, transfers, credit, limits, etc. 
+Capabilities drive service modeling and namespace concerns in an API portfolio. Namespaces are part of the Business Capability Model. Examples of namespace are: compliance, devices, transfers, credit, limits, etc.
 
 Namespaces should reflect the domain that logically groups a set of business capabilities. Domain definition should reflect the customer's perspective on how platform capabilities are organized. Note that these may not necessarily reflect the company's hierarchy, organization, or (existing) code structure. In some cases, domain definitions are aspirational, in the sense that these reflect the target, customer-oriented platform organization model. Underlying service implementations and organization structures may need to migrate to reflect these boundaries over time.
 
 <h4 id="service">Service</h4>
 
-Services provide a generic API for accessing and manipulating the value set of a [resource](#resource), regardless of how the membership function is defined or the type of software that is handling the request. Services are generic pieces of software that can perform any number of functions. It is, therefore, instructive to think about the different types of services that exist. 
+Services provide a generic API for accessing and manipulating the value set of a [resource](#resource), regardless of how the membership function is defined or the type of software that is handling the request. Services are generic pieces of software that can perform any number of functions. It is, therefore, instructive to think about the different types of services that exist.
 
 Logically, we can segment the services and the APIs that they expose into two categories:
 
 1. **Capability APIs** are public APIs exposed by services implementing generic, reusable business capabilities.
 2. **Experience-specific APIs** are built on top of capability APIs and expose functionality which may be either specific to a channel, or optimized for a context-specific specialization of a generic capability. Contextual information could be related to time, location, device, channel, identity, user, role, privilege level among other things.
-
 
 ##### Capability-based Services and APIs
 
@@ -164,12 +160,11 @@ Experience-specific services provide minimal additional business logic over core
 
 <h4 id="client">Client, API Client, API Consumer</h4>
 
-An entity that invokes an API request and consumes the API response. 
-
+An entity that invokes an API request and consumes the API response.
 
 <h1 id="service-design-principles">Service Design Principles</h1>
 
-This section captures the principles guiding the design of the services that expose APIs to internal and external developers, adjacencies, partners and affiliates. A service refers to functionality pertaining to a particular capability, exposed as an API. 
+This section captures the principles guiding the design of the services that expose APIs to internal and external developers, adjacencies, partners and affiliates. A service refers to functionality pertaining to a particular capability, exposed as an API.
 
 Following are the core design principles for a service.
 
@@ -273,9 +268,7 @@ This principle implies the following:
 * The externalization of a service must not require reimplementation, or a change in service contract
 </ul>
 
-
 <h1 id="http-methods-headers-status">HTTP Methods, Headers, and Statuses</h1>
-
 
 <h2 id="data-resources">Data Resources And HTTP Methods</h2>
 
@@ -295,15 +288,14 @@ Most services will fall easily into the standard data resource model where prima
 | `DELETE`| To _delete_ a resource. |
 | `PATCH`| To perform a _partial update_ to a resource. |
 
-
 The actual operation invoked MUST match the HTTP method semantics as defined in the table above.
 
 * The **`GET`** method MUST NOT have side effects. It MUST NOT change the state of an underlying resource.
 * **`POST`**: method SHOULD be used to create a new resource in a collection.
-    * **Example:** To add a credit card on file, `POST https://api.foo.com/v1/vault/credit-cards`
-    * Idempotency semantics: If this is a subsequent execution of the same invocation (including the [`Foo-Request-Id`](#http-custom-headers) header) and the resource was already created, then the request SHOULD be idempotent.
+  * **Example:** To add a credit card on file, `POST https://api.foo.com/v1/vault/credit-cards`
+  * Idempotency semantics: If this is a subsequent execution of the same invocation (including the [`Foo-Request-Id`](#http-custom-headers) header) and the resource was already created, then the request SHOULD be idempotent.
 * The **`POST`** method SHOULD be used to create a new sub-resource and establish its relationship with the main resource.
-    * **Example:** To refund a payment with transaction ID 12345: `POST https://api.foo.com/v1/payments/payments/12345/refund`
+  * **Example:** To refund a payment with transaction ID 12345: `POST https://api.foo.com/v1/payments/payments/12345/refund`
 * The **`POST`** method MAY be used in complex operations, along with the name of the operation. This is also known as the [_controller pattern_](patterns.md#controller-resource) and is considered an exception to the RESTful model. It is more applicable in cases when resources represent a business process, and operations are the steps or actions to be performed as part of it. For more information, please refer to [section 2.6](http://techbus.safaribooksonline.com/9780596809140/chapter-identifying-resources) of the [RESTful Web Services Cookbook][29].
 * The **`PUT`** method SHOULD be used to update resource attributes or to establish a relationship from a resource to an existing sub-resource; it updates the main resource with a reference to the sub-resource.
 
@@ -316,10 +308,9 @@ request bodies and response bodies MUST be sent using [JavaScript Object Notatio
 
 The data model for representation MUST conform to the JSON Data Interchange Format as described in [RFC 7159](https://tools.ietf.org/html/rfc7159).
 
-
 <h3 id="serialization">Serialization</h3>
 
-*  Resource endpoints MUST support `application/json` as content type. 
+*  Resource endpoints MUST support `application/json` as content type.
 * If an `Accept` header is sent and `application/json` is not an acceptable response, a `406 Not Acceptable` error MUST be returned.
 
 <h3 id="strictness">Input and Output Strictness</h3>
@@ -327,7 +318,6 @@ The data model for representation MUST conform to the JSON Data Interchange Form
 APIs MUST be strict in the information they produce, and they SHOULD be strict in what they consume as well.
 
 Since we are dealing with programming interfaces, we need to avoid guessing the meaning of what is being sent to us as much as possible. Given that integration is typically a one-time task for a developer and we provide good documentation, we need to be strict with using the data that is being received. [Postel's law](https://en.wikipedia.org/wiki/Robustness_principle) must be weighed against the many dangers of permissive parsing.
-
 
 
 <h2 id="http-headers">HTTP Headers</h2>
@@ -355,17 +345,15 @@ The purpose of HTTP headers is to provide metadata information about the body or
 
 These are headers defined or referenced from [HTTP/1.1 specification (RFC 7231)](http://tools.ietf.org/html/rfc7231#page-33). Their purpose, syntax, values, and semantics are well defined and understood by many infrastructure components.
 
-
 | HTTP Header Name | Description |
 |-------------|------------|
 | `Accept` | This request header specifies the media types that the API client is capable of handling in the response. Systems issuing the HTTP request SHOULD send this header. Systems handling the request SHOULD NOT assume it is available. It is assumed throughout these API guidelines that APIs support `application/json`. |
 | `Accept-Charset` | This request header specifies what character sets the API client is capable of handling in the response.<ul><li>The value of `Accept-Charset` SHOULD include `utf-8`.</li></ul> |
 | `Content-Language` | This request/response header is used to specify the language of the content. The default locale is `en-US`. API clients SHOULD identify the language of the data using Content-Language header. APIs MUST provide this header in the response. <br/><br/>Example: <pre>Content-Language: en-US</pre> |
-| `Content-Type` | This request/response header indicates the media type of the request or response body. <br/><ul><li>API client MUST include with request if the request contains a body, e.g. it is a `POST`, `PUT`, or `PATCH` request.</li><li>API developer MUST include it with response if a response body is included (not used with `204` responses).</li><li>If the content is a text-based type, such as [JSON][30], the `Content-Type` MUST include a character-set parameter. The character-set MUST be UTF-8.</li><li>The only supported media type for now is `application/json`.</li></ul>Example:<pre>(in HTTP request)    Accept: application/json<br/>                     Accept-Charset: utf-8<br/>(in HTTP response)   Content-Type: application/json; charset=utf-8</pre> |
+| `Content-Type` | This request/response header indicates the media type of the request or response body. <br/><ul><li>API client MUST include with request if the request contains a body, e.g. it is a `POST`, `PUT`, or `PATCH` request.</li><li>API developer MUST include it with response if a response body is included (not used with `204` responses).</li><li>If the content is a text-based type, such as [JSON][30], the `Content-Type` MUST include a character-set parameter. The character-set MUST be UTF-8.</li><li>The only supported media type for now is `application/json`.</li></ul>Example:<pre>(in HTTP request)  Accept: application/json<br/>                 Accept-Charset: utf-8<br/>(in HTTP response)   Content-Type: application/json; charset=utf-8</pre> |
 | `Link` | According to [Web Linking RFC 5988](https://tools.ietf.org/html/rfc5988), a link is a typed connection between two resources that are identified by Internationalised Resource Identifiers (IRIs). The `Link` entity-header field provides a means for serializing one or more links in HTTP headers. <br><br> APIs SHOULD be built with a design assumption that neither an API, nor an API client's business logic should depend on information provided in the headers. Headers must only be used to carry cross-cutting concern information such as security, traceability, monitoring, etc. <br><br>Therefore, usage of the `Link` header is prohibited with response codes `201` or `3xx`. Consider using [HATEOAS links](#hypermedia) in the response body instead. |
 | `Location` | This response-header field is used to redirect the recipient to a location other than the Request-URI for completion of the request or identification of a new resource. <br><br>APIs SHOULD be built with a design assumption that neither an API, nor an API client's business logic should depend on information provided in the headers. Headers must only be used to carry cross-cutting concern information such as security, traceability, monitoring, etc. <br><br>Therefore, usage of the `Location` header is prohibited with response codes `201` or `3xx`. Consider using [HATEOAS links](#hypermedia) in response body instead. | 
 | `Prefer` | The [`Prefer`](https://tools.ietf.org/html/rfc7240) request header field is used to indicate that a particular server behavior(s) is `preferred` by the client but is not required for successful completion of the request. It is an `end to end` field and MUST be forwarded by a proxy if the request is forwarded unless `Prefer` is explicitly identified as being `hop by hop` using the `Connection` header field. Following token values are possible to use for APIs provided an API documentation explicitly indicates support for `Prefer`.<br><br>`respond-async`: API client prefers that API server processes its request asynchronously. <pre>Prefer: respond-async </pre> Server returns a `202 (Accepted)` response and processes the request asynchronously. API server could use a webhook to inform the client subsequently, or the client may call `GET` to get the response at a later time. Refer to [Asynchronous Operations](patterns.md#asynchronous-operations) for more details.<br/><br/>`read-consistent`: API client prefers that API server returns response from a durable store with consistent data. For APIs that are not offering any optimization preferences for their clients, this behavior would be the default and it would not require the client to set this token. <pre>Prefer: read-consistent</pre>`read-eventual-consistent`: API client prefers that API server returns response from either cache or presumably eventually consistent datastore if applicable. If there is a miss in finding the data from either of these two types of sources, the API server might return response from a consistent, durable datastore.<pre>Prefer: read-eventual-consistent</pre>`read-cache`: API client prefers that API server returns response from cache if available. If the cache hit is a miss, the server could return response from other sources such as eventual consistent datastore or a consistent, durable datastore.<pre>Prefer: read-cache</pre>`return=representation`: API client prefers that API server include an entity representing the current state of the resource in the response to a successful request. This preference is intended to provide a means of optimizing communication between the client and server by eliminating the need for a subsequent `GET` request to retrieve the current representation of the resource following a creation (`POST`) modification operation (`PUT` or `PATCH`).<pre>Prefer: return=representation</pre>`return=minimal`: API client indicates that the server returns only a minimal response to a successful request. The determination of what constitutes an appropriate "minimal" response is solely at the discretion of the server.<pre>Prefer: return=minimal</pre>|
-
 
 
 <h3 id="http-custom-headers">HTTP Custom Headers</h3>
@@ -377,11 +365,9 @@ Following are some custom headers used in these guidelines. These are not part o
 | `Foo-Request-Id`    | API consumers MAY choose to send this header with a unique ID identifying the request header for tracking purpose. <br/><br/>Such a header can be used internally for logging and tracking purpose too. It is RECOMMENDED to send this header back as a response header if response is synchronous or as request header of a webhook as applicable. |
 
 
-
 <h3 id="http-header-propagation">HTTP Header Propagation</h3>
 
-When services receive request headers, they MUST pass on relevant custom headers in addition to the HTTP standard headers in requests/messages dispatched to downstream applications. 
-
+When services receive request headers, they MUST pass on relevant custom headers in addition to the HTTP standard headers in requests/messages dispatched to downstream applications.
 
 <h2 id="http-status-codes">HTTP Status Codes</h2>
 
@@ -399,7 +385,7 @@ When responding to API requests, the following status code ranges MUST be used.
 
 <h3 id="status-reporting">Status Reporting</h3>
 
-Success and failure apply to the whole operation not just to the SOA framework portion or to the business logic portion of code exectuion. 
+Success and failure apply to the whole operation not just to the SOA framework portion or to the business logic portion of code exectuion.
 
 Following are the guidelines for status codes and reason phrases.
 
@@ -450,36 +436,33 @@ For each HTTP method, API developers SHOULD use only status codes marked as "X" 
 | `DELETE`    | X             |               |               | X           | X             | X              | **`X`**               | X                       |
 
 
-
 * `GET`: The purpose of the `GET` method is to retrieve a resource. On success, a status code `200` and a response with the content of the resource is expected. In cases where resource collections are empty (0 items in `/v1/namespace/resources`), `200` is the appropriate status (resource will contain an empty `items` array). If a resource item is 'soft deleted' in the underlying data, `200` is not appropriate (`404` is correct) unless the 'DELETED' status is intended to be exposed.
 
 * `POST`: The primary purpose of `POST` is to create a resource. If the resource did not exist and was created as part of the execution, then a status code `201` SHOULD be returned.
     * It is expected that on a successful execution, a reference to the resource created (in the form of a link or resource identifier) is returned in the response body.
     * Idempotency semantics: If this is a subsequent execution of the same invocation (including the [`Foo-Request-Id`](#http-custom-headers) header) and the resource was already created, then a status code of `200` SHOULD be returned. For more details on idempotency in APIs, refer to [idempotency](patterns.md#idempotency).
-	* If a sub-resource is utilized ('controller' or data resource), and the primary resource identifier is non-existent, `404` is an appropriate response.
+    * If a sub-resource is utilized ('controller' or data resource), and the primary resource identifier is non-existent, `404` is an appropriate response.
 
 * `POST` can also be used while utilizing the [controller pattern](patterns.md##controller-resource), `200` is the appropriate status code.
 
-* `PUT`: This method SHOULD return status code `204` as there is no need to return any content in most cases as the request is to update a resource and it was successfully updated. The information from the request should not be echoed back. 
-    * In rare cases, server generated values may need to be provided in the response, to optimize client flow (if the client necessarily has to perform a `GET` after `PUT`). In these cases, `200` and a response body are appropriate. 
+* `PUT`: This method SHOULD return status code `204` as there is no need to return any content in most cases as the request is to update a resource and it was successfully updated. The information from the request should not be echoed back.
+    * In rare cases, server generated values may need to be provided in the response, to optimize client flow (if the client necessarily has to perform a `GET` after `PUT`). In these cases, `200` and a response body are appropriate.
 
 * `PATCH`: This method should follow the same status/response semantics as `PUT`, `204` status and no response body.
-	* `200` + response body should be avoided at all costs, as `PATCH` performs partial updates, meaning multiple calls per resource is normal. As such, responding with the entire resource can result in large bandwidth usage, especially for bandwidth-sensitive mobile clients.
+    * `200` + response body should be avoided at all costs, as `PATCH` performs partial updates, meaning multiple calls per resource is normal. As such, responding with the entire resource can result in large bandwidth usage, especially for bandwidth-sensitive mobile clients.
 
 * `DELETE`: This method SHOULD return status code `204` as there is no need to return any content in most cases as the request is to delete a resource and it was successfully deleted.
 
     * As the `DELETE` method MUST be idempotent as well, it SHOULD still return `204`, even if the resource was already deleted. Usually the API consumer does not care if the resource was deleted as part of this operation, or before. This is also the reason why `204` instead of `404` should be returned.
 
 
-
 <h1 id="hypermedia">Hypermedia</h1>
 
 <h2 id="hateoas">HATEOAS</h2>  
 
-Hypermedia, an extension of the term [hypertext](https://en.wikipedia.org/wiki/Hypertext), is a nonlinear medium of information which includes graphics, audio, video, plain text and hyperlinks according to [wikipedia](https://en.wikipedia.org/wiki/Hypermedia). Hypermedia As The Engine Of Application State (`HATEOAS`) is a constraint of the REST application architecture described by Roy Fielding in his [dissertation][0]. 
+Hypermedia, an extension of the term [hypertext](https://en.wikipedia.org/wiki/Hypertext), is a nonlinear medium of information which includes graphics, audio, video, plain text and hyperlinks according to [wikipedia](https://en.wikipedia.org/wiki/Hypermedia). Hypermedia As The Engine Of Application State (`HATEOAS`) is a constraint of the REST application architecture described by Roy Fielding in his [dissertation][0].
 
 In the context of RESTful APIs, a client could interact with a service entirely through hypermedia provided dynamically by the service. A hypermedia-driven service provides representation of resource(s) to its clients to navigate the API dynamically by including hypermedia links in the responses. This is different than other form of SOA, where servers and clients interact based on WSDL-based specification defined somewhere on the web or exchanged off-band.
-
 
 <h2 id="hateoas-api">Hypermedia Compliant API</h2>
 
@@ -502,7 +485,6 @@ POST https://api.foo.com/v1/customer/users
 
 ```
 
-
 **Response**:
 
 The API creates a new user from the input and returns the following links to the client in the response.
@@ -511,7 +493,6 @@ The API creates a new user from the input and returns the following links to the
   * A link to update the user (`PUT`).
   * A link to partially update the user (`PATCH`).
   * A link to delete the user (`DELETE`).
-
 
 ```
 
@@ -546,10 +527,9 @@ Content-Type: application/json
 }
 ```
 
-A client can store these links in its database for later use. 
+A client can store these links in its database for later use.
 
 A client may then want to display a set of users and their details before the admin decides to delete one of the users. So the client does a `GET` to the same fixed URI `/users`.
-
 
 
 **Request**:
@@ -594,14 +574,13 @@ The API returns all the users in the system with respective `self` links.
 }
 
 ```
-The client MAY follow the `self` link of the user and figure out all the possible operations that it can perform on the user resource. 
+The client MAY follow the `self` link of the user and figure out all the possible operations that it can perform on the user resource.
 
 **Request**:
 
 ```
 GET https://api.foo.com/v1/customer/users/ALT-JFWXHGUV7VI
 ```
-
 
 **Response**:
 
@@ -634,10 +613,8 @@ Content-Type: application/json
             "method": "PATCH"
         }
 
-
 }
 ```
-
 
 To delete the user, the client retrieves the URI of the link relation type `delete` from its data store and performs a delete operation on the URI.
 
@@ -659,7 +636,6 @@ The mere presence of links does not decouple a client from having to learn the d
 
 Subsequent sections provide more details about the structure of a link and what different relationship types mean.
 
-
 <h2 id="link-description-object">Link Description Object</h2>
 
 Links MUST be described using the *[Link Description Object (LDO)] [4]* schema. An LDO describes a single link relation in the links array. Following is brief description for properties of Link Description Object.
@@ -670,7 +646,7 @@ Links MUST be described using the *[Link Description Object (LDO)] [4]* schema. 
 
     * The value of the `href` property MUST be a *[URI template] [6]* used to determine the target URI of the related resource. It SHOULD be resolved as a URI template per [RFC 6570](https://tools.ietf.org/html/rfc6570).  
 
-    * Use ONLY absolute URIs as a value for `href` property. Clients usually bookmark the absolute URI of a link relation type from the representation to make API requests later. Developers MUST use the *[URI Component Naming Conventions](#uri-component-names)* to construct absolute URIs. The value from the incoming `Host` header (e.g. api.foo.com) MUST be used as the `host` field of the absolute URI. 
+    * Use ONLY absolute URIs as a value for `href` property. Clients usually bookmark the absolute URI of a link relation type from the representation to make API requests later. Developers MUST use the *[URI Component Naming Conventions](#uri-component-names)* to construct absolute URIs. The value from the incoming `Host` header (e.g. api.foo.com) MUST be used as the `host` field of the absolute URI.
 
 * `rel`: 
     * `rel` stands for relation as defined in Link Relation Type 
@@ -685,10 +661,9 @@ Links MUST be described using the *[Link Description Object (LDO)] [4]* schema. 
 * `title`: 
     * The `title` property provides a title for the link and is a helpful documentation tool to facilitate understanding by the end clients. This property is NOT REQUIRED.
 
-
 <h4 id="not-using-http-headers-for-ldo">Not Using HTTP Headers For LDO</h4>
 
-Note that these API guidelines do not recommend using the HTTP `Location` header to provide a link. Also, they do not recommend using the `Link` header as described in [JAX-RS](https://java.net/projects/jax-rs-spec/pages/Hypermedia). The scope of HTTP header is limited to point-to-point interaction between a client and a service. Since responses might be passed around to other layers and components on the client side which may not directly interact with the service, any information that is stored in a header may not be available. Therefore, we recommend returning Link Description Object(s) in HTTP response body. 
+Note that these API guidelines do not recommend using the HTTP `Location` header to provide a link. Also, they do not recommend using the `Link` header as described in [JAX-RS](https://java.net/projects/jax-rs-spec/pages/Hypermedia). The scope of HTTP header is limited to point-to-point interaction between a client and a service. Since responses might be passed around to other layers and components on the client side which may not directly interact with the service, any information that is stored in a header may not be available. Therefore, we recommend returning Link Description Object(s) in HTTP response body.
 
 <h2 id="links-array">Links Array</h2>
 
@@ -711,7 +686,7 @@ Here's an example of how you would describe links in the schema.
     "description": "A sample resource representing a customer name.",
     "properties": {
         "id": {
-	    "type": "string",
+        "type": "string",
             "description": "Unique ID to identify a customer."
         },
         "first_name": {
@@ -754,7 +729,6 @@ Here's an example of how you would describe links in the schema.
 }
 ```
 
-
 Below is an example response that is compliant with the above schema.
 
 ```
@@ -775,7 +749,6 @@ Below is an example response that is compliant with the above schema.
     ]
 }
 ```
-
 
 <h2 id="link-relation-type">Link Relation Type</h2>
 
@@ -802,18 +775,15 @@ When the semantics of a Link Relation Type defined in *[IANA's list of standardi
 For all [`controller`](patterns.md#controller-resource) style complex operations, the controller `action` name must be used as the link relation type (e.g. `activate`,`cancel`,`refund`).
 
 
-
 <h2 id="use-cases">Use Cases</h2>
 
-See [HATEOAS Use Cases](patterns.md#hateoas-use-cases) to find where HATEOAS could be used. 
-
+See [HATEOAS Use Cases](patterns.md#hateoas-use-cases) to find where HATEOAS could be used.
 
 <h1 id="naming-conventions">Naming Conventions</h1>
 
-Naming conventions for URIs, query parameters, resources, fields and enums are described in this section. Let us emphasize here that these guidelines are less about following the conventions exactly as described here but they are more about defining some naming conventions and sticking to them in a consistent manner while designing APIs. For example, we have followed [snake_case](https://en.wikipedia.org/wiki/Snake_case) for field and file names, however, you could use other forms such as [CamelCase](https://en.wikipedia.org/wiki/Camel_case) or something else that you have devised yourself. It is important to adhere to a defined convention. 
+Naming conventions for URIs, query parameters, resources, fields and enums are described in this section. Let us emphasize here that these guidelines are less about following the conventions exactly as described here but they are more about defining some naming conventions and sticking to them in a consistent manner while designing APIs. For example, we have followed [snake_case](https://en.wikipedia.org/wiki/Snake_case) for field and file names, however, you could use other forms such as [CamelCase](https://en.wikipedia.org/wiki/Camel_case) or something else that you have devised yourself. It is important to adhere to a defined convention.
 
 <h2 id="uri-component-names">URI Component Names</h2>
-
 
 URIs follow [RFC 3986][8] specification. This specification simplifies REST API service development and consumption. The guidelines in this section govern your URI structure and semantics following the RFC 3986 constraints.
 
@@ -839,7 +809,7 @@ Following is a brief description of the URI specific naming convention guideline
 ```
 
 * URIs MUST start with a letter and use only lower-case letters.
-* Literals/expressions in URI paths SHOULD be separated using a hyphen ( - ). 
+* Literals/expressions in URI paths SHOULD be separated using a hyphen ( - ).
 * Literals/expressions in query strings SHOULD be separated using underscore ( _ ).
 * URI paths and query strings MUST percent encode data into [UTF-8 octets](https://en.wikipedia.org/wiki/Percent-encoding).
 * Plural nouns SHOULD be used in the URI where appropriate to identify collections of data resources.
@@ -860,7 +830,6 @@ Following is a brief description of the URI specific naming convention guideline
 * `https://api.foo.com/v1/vault/credit-cards/CARD-7LT50814996943336KESEVWA`
 * `https://api.foo.com/v1/payments/billing-agreements/I-V8SSE9WLJGY6/re-activate`
 
-
 **Formal Definition:**
 
 |Term|Defiition|
@@ -876,15 +845,14 @@ Following is a brief description of the URI specific naming convention guideline
 |name|Alpha (Alpha \| Digit \| '_')* |
 |value|URI Percent encoded value|
 
-
 Legend
 
 ```
 '   Surround a special character with single quotes
-"	Surround strings with double quotes
-()	Use parentheses for grouping
-[]	Use brackets to specify optional expressions
-*	An expression can be repeated zero or more times
+"    Surround strings with double quotes
+()    Use parentheses for grouping
+[]    Use brackets to specify optional expressions
+*    An expression can be repeated zero or more times
 ```
 
 <h3 id="resource-names">Resource Names</h3>
@@ -903,13 +871,12 @@ When modeling a service as a set of resources, developers MUST follow these prin
 * Resource names MUST be lower-case and use only alphanumeric characters and hyphens.
     * The hyphen character, ( - ), MUST be used as a word separator in URI path literals. **Note** that this is the only place where hyphens are used as a word separator. In nearly all other situations, the underscore character, ( _ ), MUST be used.
 
-
 <h3 id="query-parameter-names">Query Parameter Names</h3>
 
 * Literals/expressions in query strings SHOULD be separated using underscore ( _ ).
 * Query parameters values MUST be percent-encoded.
 * Query parameters MUST start with a letter and SHOULD be all in lower case. Only alpha characters, digits and the underscore ( _ ) character SHALL be used.
-* Query parameters SHOULD be optional. 
+* Query parameters SHOULD be optional.
 * Some query parameter names are reserved, as indicated in [Resource Collections](#resource-collections).
 
 For more specific info on the query parameter usage, see [URI Standards](#uri-standards-query).
@@ -918,11 +885,11 @@ For more specific info on the query parameter usage, see [URI Standards](#uri-st
 
 The data model for the representation MUST conform to [JSON][30]. The values may themselves be objects, strings, numbers, booleans, or arrays of objects.
 
-* Key names MUST be lower-case words, separated by an underscore character, ( _ ).
+* Key names MUST camel cased words.
     * `foo`
-    * `bar_baz`
-* Prefix such as `is_` or `has_` SHOULD NOT be used for keys of type boolean. 
-* Fields that represent arrays SHOULD be named using plural nouns (e.g. authenticators-contains one or more authenticators, products-contains one or more products).  
+    * `barBaz`
+* Prefix such as `is` or `has` SHOULD NOT be used for keys of type boolean.
+* Fields that represent arrays SHOULD be named using plural nouns (e.g. authenticators-contains one or more authenticators, products-contains one or more products).
 
 <h2 id="enum-names">Enum Names</h2>
 
@@ -952,14 +919,13 @@ A link relation type represented by `rel` must be in lower-case.
 
 <h2 id="file-names">File Names </h2>
 
-JSON schema for various types used by API SHOULD each be contained in separate files, referenced using the `$ref` syntax (e.g. `"$ref":"object.json"`). JSON Schema files SHOULD use underscore naming syntax, e.g. `transaction_history.json`. 
-
+JSON schema for various types used by API SHOULD each be contained in separate files, referenced using the `$ref` syntax (e.g. `"$ref":"object.json"`). JSON Schema files SHOULD use underscore naming syntax, e.g. `transaction_history.json`.
 
 <h1 id="uri">URI</h1>
 
 <h2 id="resource-path">Resource Path</h2>
 
-An API's [resource path](#uri-components) consists of URI's path, query and fragment components. It would include API's major version followed by namespace, resource name and optionally one or more sub-resources. For example, consider the following URI. 
+An API's [resource path](#uri-components) consists of URI's path, query and fragment components. It would include API's major version followed by namespace, resource name and optionally one or more sub-resources. For example, consider the following URI.
 
 `https://api.foo.com/v1/vault/credit-cards/CARD-7LT50814996943336KESEVWA`
 
@@ -971,7 +937,6 @@ Following table lists various pieces of the above URI's resource path.
 |`vault`|The namespace|Namespace identifiers are used to provide a context and scope for resources. They are determined by logical boundaries in the business capability model implemented by the API platform.|
 |`credit-cards`|The resource name|If the resource name represents a collection of resources, then the `GET` method on the resource should retrieve the list of resources. Query parameters should be used to specify the search criteria.|
 |`CARD-7LT50814996943336KESEVWA`|The resource ID|To retrieve a particular resource out of the collection, a resource ID MUST be specified as part of the URI. Sub-resources are discussed below.|
-
 
 <h4 id="subresource-path">Sub-Resources</h4>
 
@@ -987,7 +952,7 @@ Sub-resources represent a relationship from one resource to another. The sub-res
 
 [Resource identifiers](#resource-identifier) identify a resource or a sub-resource. These **MUST** conform to the following guidelines.
 
-* The lifecycle of a resource identifier MUST be owned by the resource's domain model, where they can be guaranteed to uniquely identify a single resource. 
+* The lifecycle of a resource identifier MUST be owned by the resource's domain model, where they can be guaranteed to uniquely identify a single resource.
 * APIs MUST NOT use the database sequence number as the resource identifier.
 * A [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier), Hashed Id ([HMAC](https://en.wikipedia.org/wiki/Hash-based_message_authentication_code) based) is preferred as a resource identifier.
 * For security and data integrity reasons all sub-resource IDs MUST be scoped within the parent resource only.<br />
@@ -999,7 +964,6 @@ Sub-resources represent a relationship from one resource to another. The sub-res
 * Resource IDs and query parameter values MUST perform URI percent-encoding for any character other than URI unreserved characters. Query parameter values using UTF-8 characters MUST be encoded.
 
 <h2 id="query-parameters">Query Parameters</h2>
-
 
 Query parameters are name/value pairs specified after the resource path, as prescribed in RFC 3986.
 [Naming Conventions](#naming-conventions) should also be followed when applying the following section.
@@ -1037,26 +1001,23 @@ When using query parameters for search functionality, it is often necessary to p
     * The comma character (Unicode `U+002C`) SHOULD be used as the separator between values.
     * The API documentation MUST define how to escape the separator character, if necessary.
 
-
 <h1 id="json-schema">JSON Schema</h1>
 
-We would assume that [JSON Schema](http://json-schema.org/) is used to describe request/response models. Determine the version of JSON Schema to use for your APIs. At the time of writing this, [draft-04][9] is the latest version. JSON Schema [draft-03][2] has been deprecated, as support in tools is mostly focused on draft-04. The draft-04 is backwards incompatible with draft-03. 
+We would assume that [JSON Schema](http://json-schema.org/) is used to describe request/response models. Determine the version of JSON Schema to use for your APIs. At the time of writing this, [draft-04][9] is the latest version. JSON Schema [draft-03][2] has been deprecated, as support in tools is mostly focused on draft-04. The draft-04 is backwards incompatible with draft-03.
 
 <h2 id="api-contract-description">API Contract Description</h2>
 
-There are various options available to define the API's contract interface (API specification or API description). Examples are: [OpenAPI (fka Swagger)][11], [Google Discovery Document](https://developers.google.com/discovery/v1/reference/apis#method_discovery_apis_getRest), [RAML](http://raml.org/), [API BluePrint](#https://apiblueprint.org/) and so on. 
+There are various options available to define the API's contract interface (API specification or API description). Examples are: [OpenAPI (fka Swagger)][11], [Google Discovery Document](https://developers.google.com/discovery/v1/reference/apis#method_discovery_apis_getRest), [RAML](http://raml.org/), [API BluePrint](#https://apiblueprint.org/) and so on.
 
-[OpenAPI][11] is a vendor neutral API description format. The OpenAPI [Schema Object][12] (or OpenAPI JSON) is based on the [draft-04][9] and uses a predefined subset of the draft-04 schema. In addition, there are extensions provided by the  specification to allow for more complete documentation. 
+[OpenAPI][11] is a vendor neutral API description format. The OpenAPI [Schema Object][12] (or OpenAPI JSON) is based on the [draft-04][9] and uses a predefined subset of the draft-04 schema. In addition, there are extensions provided by the  specification to allow for more complete documentation.
 
 We have used OpenAPI wherever we need to describe the API specification throughout this document.
-
 
 <h2 id="schema">$schema</h2>
 
 **A note about using $schema with OpenAPI**
 
 As of writing this (Q12017), OpenAPI tools DO NOT recognize `$schema` value and (incorrectly) assume the value of $schema to be `http://swagger.io/v2/schema.json#` only. The following description applies to JSON schema (http://json-schema.org) used in API specification specified using specifications other than OpenAPI.
-
 
 Use [$schema](http://json-schema.org/latest/json-schema-core.html#anchor22) to indicate the version of JSON schema used by each JSON type you define as shown below.
 
@@ -1090,7 +1051,6 @@ If you are unsure about the specific schema version to refer to, it would be saf
 
 
 
-
 <h2 id="readOnly">readOnly</h2>
 
 When resources contain immutable fields, `PUT`/`PATCH` operations can still be utilized to update that resource. To indicate immutable fields in the resource, the `readOnly` field can be specified on the immutable fields.
@@ -1099,13 +1059,12 @@ When resources contain immutable fields, `PUT`/`PATCH` operations can still be u
 
 ```
 "properties": {
-		"id": {
-			"type": "string",
-			"description": "Identifier of the resource.",
-			"readOnly": true
-		},
+        "id": {
+            "type": "string",
+            "description": "Identifier of the resource.",
+            "readOnly": true
+        },
 ```
-
 
 <h2 id="migration-from-draft03">Migration From draft-03</h2>
 
@@ -1174,14 +1133,13 @@ These following formats are deprecated in draft-04:
 * `date`
 * `time`
 
-Therefore, only `"format": "date-time"` MUST be used for any variation of date, time, or date and time. Any references to formats of `date` or `time` should be updated to `date-time`. 
+Therefore, only `"format": "date-time"` MUST be used for any variation of date, time, or date and time. Any references to formats of `date` or `time` should be updated to `date-time`.
 
 Field descriptions SHOULD indicate specifics of whether date or time is accepted. `date-time` specifies that ISO-8601/RFC3339 dates are utilized, which includes date-only and time-only.
 
 <h2 id="advanced-syntax-draft04">Advanced Syntax draft-04</h2>
 
-Be aware that `anyOf`/`allOf`/`oneOf` syntax can cause issues with tooling, as code generators, documentation tools and validation of these keywords is often not implemented. 
-
+Be aware that `anyOf`/`allOf`/`oneOf` syntax can cause issues with tooling, as code generators, documentation tools and validation of these keywords is often not implemented.
 
 ### allOf
 
@@ -1189,7 +1147,7 @@ The `allOf` keyword MUST only be used for the purposes listed here.
 
 #### Extend object
 
-The `allOf` keyword in JSON Schema SHOULD be used for extending objects. In draft-03, this was implemented with the `extends` keyword, which has been deprecated in draft-04. 
+The `allOf` keyword in JSON Schema SHOULD be used for extending objects. In draft-03, this was implemented with the `extends` keyword, which has been deprecated in draft-04.
 
 ##### Example
 A common need is to extend a common type with additional fields. In this example, we will extend the [address](v1/schema/json/draft-04/address_portable.json) with a `type` field.
@@ -1254,7 +1212,7 @@ The `anyOf` and `oneOf` keywords SHOULD NOT be used to design APIs. A variety of
 }
 ```
 
-In order for an API consumer to deserialize this response (where POJO/POCO objects are used), standard mechanisms would not work. Because the `extensions` field can change on any given response, the consumer is forced to create a composite object to represent both `payment_properties.json` and `money_request_properties.json`. 
+In order for an API consumer to deserialize this response (where POJO/POCO objects are used), standard mechanisms would not work. Because the `extensions` field can change on any given response, the consumer is forced to create a composite object to represent both `payment_properties.json` and `money_request_properties.json`.
 
 A better approach:
 
@@ -1281,7 +1239,7 @@ A better approach:
 }
 ```
 
-In this scenario, both `payment` and `money_request` are in the definition. However, in practice, only one field would be serialized based on the `activity_type`. 
+In this scenario, both `payment` and `money_request` are in the definition. However, in practice, only one field would be serialized based on the `activity_type`.
 
 For API consumers, this is a very predictable response, and allows for easy deserialization through standard libraries, without writing custom deserializers.
 
@@ -1297,9 +1255,9 @@ JSON Schema [draft-04][9] SHOULD be used to define all fields in APIs. As such, 
 
 At a minimum, `strings` SHOULD always explicitly define a `minLength` and `maxLength`.
 
-There are several reasons for doing so. 
+There are several reasons for doing so.
 
-1. Without a maximum length, it is impossible to reliably define a database column to store a given string. 
+1. Without a maximum length, it is impossible to reliably define a database column to store a given string.
 2. Without a maximum and minimum, it is also impossible to predict whether a change in length will break backwards-compatibility with existing clients.
 3. Finally, without a minimum length, it is often possible for clients to send an empty string when they should not be allowed to do so.
 
@@ -1309,7 +1267,6 @@ API authors SHOULD consider practical limitations when defining `maxLength`. For
 
 `string` SHOULD utilize the `pattern` property as appropriate, especially when defining enumerated values or numbers. However, it is RECOMMENDED not to overly constrain fields without a valid technical reason.
 
-
 <h3 id="enum">Enumeration</h3>
 
 The JSON Schema `enum` keyword is difficult to use safely. It is not possible to add new values to an `enum` in a schema that describes a service response without breaking backwards compatibility. In that scenario, clients will often reject responses with values that are not in the older copy of the schema that they posess. This is usually not the desired behavior. Clients should usually handle unknown values more gracefully, but since you can't control nor verify their behavior, it is not safe to add new enum values.
@@ -1317,9 +1274,9 @@ The JSON Schema `enum` keyword is difficult to use safely. It is not possible to
 For the reasons stated above, the schema author MUST comply with the following guidelines while using an `enum` with the JSON type `string`.
 
 * The keyword `enum` SHOULD be used only when the set of values are fixed and would never change in future.
-* If you anticipate adding new values to the `enum` array in future, avoid using the keyword `enum`. You SHOULD instead use a `string` type and document all acceptable values for the `string`. When using a `string` type to express enumerated values, you SHOULD enforce [naming conventions](#enum-names) through a `pattern` field. 
+* If you anticipate adding new values to the `enum` array in future, avoid using the keyword `enum`. You SHOULD instead use a `string` type and document all acceptable values for the `string`. When using a `string` type to express enumerated values, you SHOULD enforce [naming conventions](#enum-names) through a `pattern` field.
 * If there is no technical reason to do otherwise -- for instance, a pre-existing database column of smaller size -- `maxLength` should be set to 255. `minLength` should be set to 1 to prevent clients sending the empty string.
-* All possible values of an `enum` field SHOULD be precisely defined in the documentation. If there is not enough space in the `description` field to do so, you SHOULD use the API’s user guide to define them. 
+* All possible values of an `enum` field SHOULD be precisely defined in the documentation. If there is not enough space in the `description` field to do so, you SHOULD use the API’s user guide to define them.
 
 Given below is the JSON snippet for enforcing naming conventions and length constraints.
 
@@ -1346,7 +1303,7 @@ Many programming languages do not safely handle unbounded values in JSON. JavaSc
 
 To ensure the greatest degree of cross-client compatibility possible, schema authors SHOULD:
 
-* Never use the JSON Schema `number` type. Some languages may interpret it as a fixed-point value, and some as floating-point. Always use `string` to represent a decimal value. 
+* Never use the JSON Schema `number` type. Some languages may interpret it as a fixed-point value, and some as floating-point. Always use `string` to represent a decimal value.
 
 * Only define `integer` types for values that can be represented in a 32-bit signed integer, that is to say, values between (`(2^31) - 1) and -(2^31`). This ensures compatibility across a wide range of programming languages and circumstances. For example, array indices in JavaScript are signed 32-bit integers.
 
@@ -1440,15 +1397,13 @@ Resource representations in API MUST reuse the [common data type][13] definition
 
 <h3 id="address">Address</h3>
 
-
 We recommend using [`address_portable.json`][19] for all requirements related to address. The `address_portable.json` is
 
 * backward compatible with [hcard](http://microformats.org/wiki/hcard) address microformats,
 * forward compatible with Google open-source address validation metadata ([i18n-api][10]) and W3 HTML5.1 [autofill][11] fields,
 * allows mapping to and from many address normalization services (ANS) such as [AddressDoctor][16].
 
-Please refer to [README for Address][12] for more details about the address type, guidance on how to map it to i18n-api's address and W3 HTML5.1's autofill fields. 
-
+Please refer to [README for Address][12] for more details about the address type, guidance on how to map it to i18n-api's address and W3 HTML5.1's autofill fields.
 
 <h3 id="money">Money</h3>
 
@@ -1481,12 +1436,11 @@ The following common types MUST be used with regard to global country, currency,
 * [`currency_code`](v1/schema/json/draft-04/currency_code.json)
   * Currency type MUST use the three letter currency code as defined in [ISO 4217](http://www.currency-iso.org/). For quick reference on currency codes, see [http://en.wikipedia.org/wiki/ISO_4217](http://en.wikipedia.org/wiki/ISO_4217).
 * [`language.json`](v1/schema/json/draft-04/language.json)
- 	* Language type uses [BCP-47](https://tools.ietf.org/html/bcp47) language tag.
+     * Language type uses [BCP-47](https://tools.ietf.org/html/bcp47) language tag.
 * [`locale.json`](v1/schema/json/draft-04/locale.json)
- 	* Locale type defines the concept of locale, which is composed of `country_code` and `language`. Optionally, IANA timezone can be included to further define the locale.
+     * Locale type defines the concept of locale, which is composed of `country_code` and `language`. Optionally, IANA timezone can be included to further define the locale.
 * [`province.json`](v1/schema/json/draft-04/province.json) 
     * Province type provides detailed definition of province or state, based on [ISO-3166-2](https://en.wikipedia.org/wiki/ISO_3166-2) country subdivisions, with room for variant local, international, and abbreviated representations of province names. Useful for logistics, statistics, and building state pull-downs for on-boarding.
-
 
 <h3 id="date-time">Date, Time and Timezone</h3>
 
@@ -1496,9 +1450,9 @@ When dealing with date and time, all APIs MUST conform to the following guidelin
 
 * All APIs MUST only emit [UTC](https://en.wikipedia.org/wiki/Coordinated_Universal_Time) time (aka [Zulu time](https://en.wikipedia.org/wiki/List_of_military_time_zones) or [GMT](https://en.wikipedia.org/wiki/Greenwich_Mean_Time)) in the responses.
 
-* When processing requests, an API SHOULD accept `date-time` or time fields that contain an offset from UTC. For example, `2016-09-28T18:30:41.000+05:00` SHOULD be accepted as equivalent to `2016-09-28T13:30:41.000Z`. This helps ensure compatibility with third parties who may not be capable of normalizing values to UTC before sending requests. In such cases the offset SHOULD only be used to calculate the equivalent UTC time before it is persisted in the system (because of known platform/language/DB interoperability issues). A UTC offset MUST NOT be used to derive anything else. 
+* When processing requests, an API SHOULD accept `date-time` or time fields that contain an offset from UTC. For example, `2016-09-28T18:30:41.000+05:00` SHOULD be accepted as equivalent to `2016-09-28T13:30:41.000Z`. This helps ensure compatibility with third parties who may not be capable of normalizing values to UTC before sending requests. In such cases the offset SHOULD only be used to calculate the equivalent UTC time before it is persisted in the system (because of known platform/language/DB interoperability issues). A UTC offset MUST NOT be used to derive anything else.
 
-* If the business logic requires expressing the timezone of an event, it is RECOMMENDED that you capture the timezone explicitly by using a separate request/response field. You SHOULD NOT use offset to derive the timezone information. The offset alone is insufficient to accurately transform the stored UTC time back to a local time later. The reason is that a UTC offset might be same for many geographical regions and based on the time of the year there may be additional factors such as daylight savings. For example, an offset UTC-05:00 represents Eastern Standard Time during winter, Central Dayight Time during summer, and year-round offset for Panama, Columbia, and Peru. 
+* If the business logic requires expressing the timezone of an event, it is RECOMMENDED that you capture the timezone explicitly by using a separate request/response field. You SHOULD NOT use offset to derive the timezone information. The offset alone is insufficient to accurately transform the stored UTC time back to a local time later. The reason is that a UTC offset might be same for many geographical regions and based on the time of the year there may be additional factors such as daylight savings. For example, an offset UTC-05:00 represents Eastern Standard Time during winter, Central Dayight Time during summer, and year-round offset for Panama, Columbia, and Peru.
  
 * The timezone string MUST be per [IANA timezone database](https://www.iana.org/time-zones) (aka **Olson** database or **tzdata** or **zoneinfo** database), for example *America/Los_Angeles* for Pacific Time, or *Europe/Berlin* for Central European Time.
 
@@ -1514,29 +1468,25 @@ The following common types MUST be used to express various date-time formats:
 * [`date_year_month.json`](v1/schema/json/draft-04/date_year_month.json) SHOULD be used to express a floating date that contains only the **month** and **year**. For example, card expiry date (`2016-09`).
 * [`time_zone.json`](v1/schema/json/draft-04/time_zone.json) SHOULD be used for expressing timezone of a RFC3339 `date-time` or a `full-time` field.
 
-
 <h1 id="error-handling">Error Handling</h1>
 
 As per HTTP specifications, the outcome of a request execution could be specifiedusing an integer and a message. The number is known as the _status code_ and the message as the _reason phrase_. The reason phrase is a human readable message used to clarify the outcome of the response. The HTTP status codes in the `4xx` range indicate client-side errors (validation or logic errors), while those in the `5xx` range indicate server-side errors (usually defect or outage). However, these status codes and human readable reason phrase are not sufficient to convey enough information about an error in a machine-readable manner. To resolve an error, non-human consumers of RESTful APIs need additional help.
 
 Therefore, APIs MUST return a JSON error representation that conforms to the [`error.json`][22] schema defined in the [Common Types][13] repository. It is recommended that the namespace that an API belongs to has an error catalog associated with it. Please refer to [Error Catalog](#error-catalog) for more details.    
 
-
 <h2 id="error-schema">Error Schema</h2>
-
 
 An error response following `error.json` as schema MUST include the following fields:
 
 * `name`: A human-readable, unique name for the error. It is recommended that this value would be retrieved from the error catalog [`error_spec.json#name`][24] before sending the error response.
 * `details`: An array that contains individual instance(s) of the error with specifics such as the following. This field is required for client side errors (`4xx`).
-	* `field`: [JSON Pointer][23] to the field in error if in body, else name of the path parameter or query parameter.
-	* `value`: Value of the field in error.
-	* `issue`: Reason for error. It is recommended that this value would be retrieved from the error catalog [`error_spec_issue.json#issue`][25] before sending the error response.
-	* `location`: The location of the field in the error, either `query`, `path`, or `body`. If this field is not present, the default value is `body`.
+    * `field`: [JSON Pointer][23] to the field in error if in body, else name of the path parameter or query parameter.
+    * `value`: Value of the field in error.
+    * `issue`: Reason for error. It is recommended that this value would be retrieved from the error catalog [`error_spec_issue.json#issue`][25] before sending the error response.
+    * `location`: The location of the field in the error, either `query`, `path`, or `body`. If this field is not present, the default value is `body`.
 * `debug_id`: A unique error identifier generated on the server-side and logged for correlation purposes.
 * `message`: A human-readable message, describing the error. This message MUST be a description of the problem NOT a suggestion about how to fix it. It is recommended that this value would be retrieved from the error catalog [`error_spec.json#message`][24] before sending the error response.
-* `links`: [HATEOAS](hypermedia.md) links specific to an error scenario. Use these links to provide more information about the error scenario and how to resolve it. You could insert links from [`error_spec.json#suggested_application_actions`][24] and/or [`error_spec.json#suggested_user_actions`][24] here as well as other HATEOAS links relevant to the API. 
-
+* `links`: [HATEOAS](hypermedia.md) links specific to an error scenario. Use these links to provide more information about the error scenario and how to resolve it. You could insert links from [`error_spec.json#suggested_application_actions`][24] and/or [`error_spec.json#suggested_user_actions`][24] here as well as other HATEOAS links relevant to the API.
 
 The following fields are optional:
 
@@ -1544,10 +1494,9 @@ The following fields are optional:
 
 ##### Use of JSON Pointer
 
-If you have used some other means to identify the `field` in an already released API, you could continue using your existing approach. However, if you plan to migrate to the approach suggested, you would want to bump up the major version of your API and provide migration assistance to your clients as this could be a potential breaking change for them. 
+If you have used some other means to identify the `field` in an already released API, you could continue using your existing approach. However, if you plan to migrate to the approach suggested, you would want to bump up the major version of your API and provide migration assistance to your clients as this could be a potential breaking change for them.
 
 The JSON Pointer for the `field` SHOULD be a [JSON string value](https://tools.ietf.org/html/rfc6901#section-5).
-
 
 <h3 id="input-errors">Input Validation Errors</h3>
 
@@ -1561,7 +1510,7 @@ In validating requests, there are a variety of concerns that should be addressed
 
 <h2 id="error-samples">Error Samples</h2>
 
-This section provides some samples to describe usage of [`error.json`][22] in various scenarios. 
+This section provides some samples to describe usage of [`error.json`][22] in various scenarios.
 
 <h4 id="sampleresponse-invalid">Validation Error Response - Single Field</h4>
 
@@ -1665,8 +1614,7 @@ In cases where client input is well-formed and valid but the request action may 
     
 <h2 id="error-declaration">Error Declaration In API Specification</h2>
 
-It is important that documentation generation tools and client/server-side binding generation tools recognize [`error.json`][22]. Following section shows how you could refer `error.json` in an API specification confirming to OpenAPI. 
-
+It is important that documentation generation tools and client/server-side binding generation tools recognize [`error.json`][22]. Following section shows how you could refer `error.json` in an API specification confirming to OpenAPI.
 
 ``` 
 "responses": {
@@ -1696,7 +1644,6 @@ It is important that documentation generation tools and client/server-side bindi
 ```
 
 
-
 <h2 id="userguide-errors">Samples with Error Scenarios in Documentation</h2>
 
 The User Guide of an API is a document that is exposed to API consumers. In addition to linking to samples showing successful execution for invocation on various methods exposed by the API, the API developer should also provide links to samples showing error scenarios. It is equally, or perhaps more, important to show the API consumers how an API would propagate errors in a machine-readable form in order to build applications that take necessary actions to handle errors gracefully and in a meaningful manner.
@@ -1706,7 +1653,7 @@ In conclusion, we reiterate the message we started with that non-human consumers
 
 <h2 id="error-catalog">Error Catalog</h2>
 
-Error handling [guidelines](#error-handling) described earlier show how to provide error related details responses at runtime. This section explains how to catalog the errors so they can be easily consumed in service runtime and for generating documentation. 
+Error handling [guidelines](#error-handling) described earlier show how to provide error related details responses at runtime. This section explains how to catalog the errors so they can be easily consumed in service runtime and for generating documentation.
 
 An Error Catalog is a single JSON file that contains a collection of error specifications (or error metadata) for a namespace. Each error specification includes error name, error message, issue details and related links among other things. The error catalog supports multiple locales or languages. For a specific error catalog, there should be exactly one default version, known as the top-level catalog, which could be in English for example. There should be corresponding locale-specific catalogs, one for each additional supported locale, as needed.
 
@@ -1718,37 +1665,36 @@ Following are some reasons to catalog the errors for an API:
 2. To _localize_ the error strings: If error related strings such as `message`, `issue`, `actions`, among other things in `error.json` are externalized, it is easy for the documentation and an internationalization team to modify and localize these without any help from service developers and without requiring redeployment of the services.
 3. To keep service's implementation and the API documentation in _sync_ with regards to errors: API consumers should be able to refer with confidencethe API's documentation for errors generated by the services at runtime. This helps to reduce the cost and the time spent supporting an API and increases `adoptability` of the API.
 
-
 <h3 id="error-catalog-schema">Error Catalog Schema</h3>
 
 There are four main JSON schema files for the Error Catalog.
 
-1. [`error_catalog.json`][26] defines top-level catalog container. 
-	* `namespace`: API namespace
-	* `language`: language used to catalog the errors. Default is US English. This value MUST be a [BCP-47](https://tools.ietf.org/html/bcp47) language tag as in `en` or `en-US`.
-	* `errors`: one or more error catalog items.
+1. [`error_catalog.json`][26] defines top-level catalog container.
+    * `namespace`: API namespace
+    * `language`: language used to catalog the errors. Default is US English. This value MUST be a [BCP-47](https://tools.ietf.org/html/bcp47) language tag as in `en` or `en-US`.
+    * `errors`: one or more error catalog items.
 2. [`error_catalog_item.json`][27] defines an item in error catalog. This schema in its initial version only includes error specification `error_spec`. In future versions, it would provide a space to establish relationship between an error specification and method specifications that would use the error specification to respond with error.
 3. [`error_spec.json`][24] is where the core of error specification is defined. The specification includes the following properties.
-	* `name`: A human-readable, unique name for the error. This value MUST be the value set in [`error.json#name`][22] before sending the error response.
-	* `message`: A human-readable message, describing the error. This message MUST be a description of the problem NOT a suggestion about how to fix it. This value MUST be the value set in [`error.json#message`][22] before sending the error response. This value could be localized. 
-	* `log_level`: Log level associated with this error. This MUST NOT be streamed out in error responses or exposed in any external documentation.
-	* `legacy_code`: Legacy error code. Use if and only if the existing and published error metadata uses the code and it must continue to be supported. Utilize `additionalProperties` of [`error.json`][22] to send this code in the error response.   
-	* `http_status_codes`: Applicable HTTP status codes for this error.
-	* `suggested_application_actions`: Suggest practical actions that the developer of application consuming the API could take in order to resolve the error condition. These MUST be in English.
-	* `suggested_user_actions`: Suggest practical actions that a user of the application consuming the API could take in order to resolve the error condition. These MUST be in the language used `error_catalog.json#language`.
-	* `links`: Error context specific [HATEOAS](#hypermedia) links. Corresponds to [`error.json#links`][22].
-	* `issues`: Issues associated with this error as defined in `error_spec_issue.json`. Each issue corresponds to an item in [`error_details.json`][28]. 
-* [`error_spec_issue.json`][25] defines details related to the error. For example, there could be multiple validation errors triggering `400 BAD REQUEST`. Each invalid field MUST be listed in the [`error_details.json`][28] while sending the error response. 
-	* `id`: Catalog-unique identifier of the issue. This is required in order to search for the `error_spec_issue` from cached error catalog.
-	* `issue`: Reason for error. This value MUST be the value set in [`error_details.json#issue`][28]. The issue string could have variables. Please use parametrized string following the Java String Formatter syntax. This value chould be localized.  
+    * `name`: A human-readable, unique name for the error. This value MUST be the value set in [`error.json#name`][22] before sending the error response.
+    * `message`: A human-readable message, describing the error. This message MUST be a description of the problem NOT a suggestion about how to fix it. This value MUST be the value set in [`error.json#message`][22] before sending the error response. This value could be localized.
+    * `log_level`: Log level associated with this error. This MUST NOT be streamed out in error responses or exposed in any external documentation.
+    * `legacy_code`: Legacy error code. Use if and only if the existing and published error metadata uses the code and it must continue to be supported. Utilize `additionalProperties` of [`error.json`][22] to send this code in the error response.   
+    * `http_status_codes`: Applicable HTTP status codes for this error.
+    * `suggested_application_actions`: Suggest practical actions that the developer of application consuming the API could take in order to resolve the error condition. These MUST be in English.
+    * `suggested_user_actions`: Suggest practical actions that a user of the application consuming the API could take in order to resolve the error condition. These MUST be in the language used `error_catalog.json#language`.
+    * `links`: Error context specific [HATEOAS](#hypermedia) links. Corresponds to [`error.json#links`][22].
+    * `issues`: Issues associated with this error as defined in `error_spec_issue.json`. Each issue corresponds to an item in [`error_details.json`][28].
+* [`error_spec_issue.json`][25] defines details related to the error. For example, there could be multiple validation errors triggering `400 BAD REQUEST`. Each invalid field MUST be listed in the [`error_details.json`][28] while sending the error response.
+    * `id`: Catalog-unique identifier of the issue. This is required in order to search for the `error_spec_issue` from cached error catalog.
+    * `issue`: Reason for error. This value MUST be the value set in [`error_details.json#issue`][28]. The issue string could have variables. Please use parametrized string following the Java String Formatter syntax. This value chould be localized.  
 
 <h3 id="string-format">String Format</h3>
 
 For API services that are implemented in Java, various strings found in the error catalog MUST be formatted using Java's `printf-style` inspired format. It's recommended to use Java's [format specification](https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html#summary) for values of `message` and `issue` fields in the error catalog where applicable.
  
-Service developers are strongly encouraged to use tools, such as [Java String Formatter](https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html) or similar, to interpret the formatted strings as found in the error catalog. 
+Service developers are strongly encouraged to use tools, such as [Java String Formatter](https://docs.oracle.com/javase/7/docs/api/java/util/Formatter.html) or similar, to interpret the formatted strings as found in the error catalog.
 
-For example, an `error_spec` having value `Could not add card due to failure to comply with guideline %s` for `message` must be interpreted using a formatter as shown below. 
+For example, an `error_spec` having value `Could not add card due to failure to comply with guideline %s` for `message` must be interpreted using a formatter as shown below.
 
 ```
 com.foo.platform.error.ErrorSpec errorSpec = <find errorSpec from catalog>
@@ -1771,8 +1717,7 @@ Response response = Response.status(Response.Status.BAD_REQUEST).entity(error).e
 throw new WebApplicationException(response);
 ```
 
-The above example code is for illustration purposes only. 
-
+The above example code is for illustration purposes only.
 
 <h3 id="samples">Samples</h3>
 
@@ -1782,42 +1727,42 @@ This section provides some sample error catalogs.
 
 ```
 {
-	"namespace": "payments",
-	"language": "en-US",
-	"errors": [{
-		"error_spec": {
-			"name": "VALIDATION_ERROR",
-			"message": "Invalid request - see details",
-			"log_level": "ERROR",
-			"http_status_codes": [
-				400
-			],
-			"issues": [{
-				"id": "InvalidCreditCardType",
-				"issue": "Value is invalid (must be visa, mastercard, amex, or discover)"
-			}],
-			"suggested_application_actions": [
-				"Provide an acceptable card type and resend the request."
-			]
-		}
-	}, {
-		"error_spec": {
-			"name": "PAYEE_ACCOUNT_LOCKED_OR_CLOSED",
-			"message": "Payee account is locked or closed",
-			"log_level": "ERROR",
-			"http_status_codes": [
-				422
-			],
-			"legacy_code": "PAYER_ACCOUNT_LOCKED_OR_CLOSED",
-			"issues": [{
-				"id": "PayerAccountLocked",
-				"issue": "The account receiving this payment is locked or closed and cannot receive payments."
-			}],
-			"suggested_user_actions": [
-				"Contact Customer Service at contact@foo.com"
-			]
-		}
-	}]
+    "namespace": "payments",
+    "language": "en-US",
+    "errors": [{
+        "error_spec": {
+            "name": "VALIDATION_ERROR",
+            "message": "Invalid request - see details",
+            "log_level": "ERROR",
+            "http_status_codes": [
+                400
+            ],
+            "issues": [{
+                "id": "InvalidCreditCardType",
+                "issue": "Value is invalid (must be visa, mastercard, amex, or discover)"
+            }],
+            "suggested_application_actions": [
+                "Provide an acceptable card type and resend the request."
+            ]
+        }
+    }, {
+        "error_spec": {
+            "name": "PAYEE_ACCOUNT_LOCKED_OR_CLOSED",
+            "message": "Payee account is locked or closed",
+            "log_level": "ERROR",
+            "http_status_codes": [
+                422
+            ],
+            "legacy_code": "PAYER_ACCOUNT_LOCKED_OR_CLOSED",
+            "issues": [{
+                "id": "PayerAccountLocked",
+                "issue": "The account receiving this payment is locked or closed and cannot receive payments."
+            }],
+            "suggested_user_actions": [
+                "Contact Customer Service at contact@foo.com"
+            ]
+        }
+    }]
 }
 ```
 
@@ -1825,41 +1770,41 @@ This section provides some sample error catalogs.
 
 ```
 {
-	"namespace": "wallet",
-	"language": "en-US",
-	"errors": [{
-		"error_spec": {
-			"name": "INVALID_ISSUER_DETAILS",
-			"message": "Invalid issuer details",
-			"log_level": "ERROR",
-			"http_status_codes": [
-				400
-			],
-			"issues": [{
-				"id": "ISSUER_DATA_NOT_FOUND",
-				"issue": "Issuer data not found"
-			}],
-			"suggested_application_actions": [
-				"Provide issuer related data and resend the request."
-			]
-		}
-	}, {
-		"error_spec": {
-			"name": "INSTRUMENT_BLOCKED",
-			"message": "Instrument is currently blocked.",
-			"log_level": "ERROR",
-			"http_status_codes": [
-				422
-			],
-			"issues": [{
-				"id": "BankAccountBlocked",
-				"issue": "Bank account is blocked due max random deposit retries. "
-			}],
-			"suggested_user_actions": [
-				"Contact Customer Service at contact@foo.com."
-			]
-		}
-	}]
+    "namespace": "wallet",
+    "language": "en-US",
+    "errors": [{
+        "error_spec": {
+            "name": "INVALID_ISSUER_DETAILS",
+            "message": "Invalid issuer details",
+            "log_level": "ERROR",
+            "http_status_codes": [
+                400
+            ],
+            "issues": [{
+                "id": "ISSUER_DATA_NOT_FOUND",
+                "issue": "Issuer data not found"
+            }],
+            "suggested_application_actions": [
+                "Provide issuer related data and resend the request."
+            ]
+        }
+    }, {
+        "error_spec": {
+            "name": "INSTRUMENT_BLOCKED",
+            "message": "Instrument is currently blocked.",
+            "log_level": "ERROR",
+            "http_status_codes": [
+                422
+            ],
+            "issues": [{
+                "id": "BankAccountBlocked",
+                "issue": "Bank account is blocked due max random deposit retries. "
+            }],
+            "suggested_user_actions": [
+                "Contact Customer Service at contact@foo.com."
+            ]
+        }
+    }]
 }
 ```
 
@@ -1867,40 +1812,39 @@ This section provides some sample error catalogs.
 
 ```
 {
-	"namespace": "payment-networks",
-	"language": "en-US",
-	"errors": [{
-		"error_spec": {
-			"name": "VENDOR_TIMEOUT",
-			"message": "Transaction timed out while waiting for response from downstream service provided by a 3rd party vendor.",
-			"log_level": "ERROR",
-			"http_status_codes": [
-				504
-			],
-			"suggested_application_actions": [
-				"Retry again later."
-			]
-		}
-	}, {
-		"error_spec": {
-			"name": "INTERNAL_TIMEOUT",
-			"message": "Internal error due to timeout. Request took too long to process. The status of the transaction is unknown.",
-			"log_level": "ERROR",
-			"http_status_codes": [
-				500
-			],
-			"suggested_application_actions": [
-				"Contact Customer Service at contact@foo.com and provide Correlation-Id and debug_id for diagnosis along with other details."
-			]
-		}
-	}]
+    "namespace": "payment-networks",
+    "language": "en-US",
+    "errors": [{
+        "error_spec": {
+            "name": "VENDOR_TIMEOUT",
+            "message": "Transaction timed out while waiting for response from downstream service provided by a 3rd party vendor.",
+            "log_level": "ERROR",
+            "http_status_codes": [
+                504
+            ],
+            "suggested_application_actions": [
+                "Retry again later."
+            ]
+        }
+    }, {
+        "error_spec": {
+            "name": "INTERNAL_TIMEOUT",
+            "message": "Internal error due to timeout. Request took too long to process. The status of the transaction is unknown.",
+            "log_level": "ERROR",
+            "http_status_codes": [
+                500
+            ],
+            "suggested_application_actions": [
+                "Contact Customer Service at contact@foo.com and provide Correlation-Id and debug_id for diagnosis along with other details."
+            ]
+        }
+    }]
 }
 ```
 
-
 <h1 id="api-versioning">API Versioning</h1>
 
-This section describes how to version APIs. It describes API's lifecycle states, enumerates versioning policy, describes backwards compatiblity related guidelines and describes an End-Of-Life policy. 
+This section describes how to version APIs. It describes API's lifecycle states, enumerates versioning policy, describes backwards compatiblity related guidelines and describes an End-Of-Life policy.
 
 <h2 id="api-lifecycle">API Lifecycle</h2>
 
@@ -1924,9 +1868,8 @@ API’s are versioned products and MUST adhere to the following versioning princ
 4. API specification versions reflect interface changes and MAY be separate from service implementation versioning schemes.
 5. A minor API version MUST maintain backward compatibility with all previous minor versions, within the same major version.
 6. A major API version MAY maintain backward compatibility with a previous major version.
-	
+    
 For a given functionality set, there MUST be only one API version in the `LIVE` state at any given time across all major and minor versions. This ensures that subscribers always understand which versioned API product they should be using. For example, v1.2 `RETIRED`, v1.3 `DEPRECATED`, or v2.0 `LIVE`.
-
 
 <h2 id="backwards-compatibility">Backwards Compatibility</h2>
 
@@ -1942,7 +1885,6 @@ APIs MUST adhere to the following principles to be considered backwards compatib
     1. As an optional extension, or
     2. As an operation on a new child resource, or
     3. By altering a request body, while still accepting all the previous, existing request variations, if an existing operation (e.g., resource creation) cannot be reasonably extended.
-
 
 <h3 id="backwards-incompatible-changes">Non-exhaustive List of Backwards Incompatible Changes</h3>
 
@@ -1969,7 +1911,6 @@ APIs MUST adhere to the following principles to be considered backwards compatib
 8. If the property of an object is a URI, then it MUST have the same stability mentioned as URIs.
 9. For an API returning HATEOAS links as part of the representation, the values of rel and href MUST remain the same.
 10. For ENUM types, there MUST NOT be any change in already supported enumerated values or meaning of these values.
-
 
 <h2 id="eol-policy">End of Life Policy</h2>
 
@@ -2011,19 +1952,17 @@ Migration Strategy
 
 
 
-
 <h1 id="deprecation">Deprecation</h1>
 
 This document describes a solution to deprecate parts of an API as the API evolves. It is an extension to the API Versioning Policy.
 
-
 <h3 id="deprecation-terms-used">Terms Used</h3>
 
-The term *`API Element`* is used throughout this document to refer to the *things* that could be deprecated in an API. Examples of an `API Element` are: an endpoint, a query parameter, a path parameter, a property within a JSON Object schema, JSON Object schema of a type or a custom HTTP header among other things. 
+The term *`API Element`* is used throughout this document to refer to the *things* that could be deprecated in an API. Examples of an `API Element` are: an endpoint, a query parameter, a path parameter, a property within a JSON Object schema, JSON Object schema of a type or a custom HTTP header among other things.
 
-The term *`old API`* is used to indicate existing minor or major version of your API or an existing different API that your API supersedes. 
+The term *`old API`* is used to indicate existing minor or major version of your API or an existing different API that your API supersedes.
 
-The term *`new API`* is used to indicate a new minor or major version of your API or a new different API that supersedes the `old API`. 
+The term *`new API`* is used to indicate a new minor or major version of your API or a new different API that supersedes the `old API`.
 
 *`API definition`* is in the form of specification of an interface of a service following the [OpenAPI][11]. API's definition could be found in `swagger.json`.
 
@@ -2037,14 +1976,14 @@ One option is to create a new major version of your API. This allows you to leav
 
 Here are the requirements for deprecation.
 
-1. An API developer should be able to deprecate an `API Element` in a minor version of an API. 
+1. An API developer should be able to deprecate an `API Element` in a minor version of an API.
 2. An API specification MUST highlight one or more deprecated elements of the API so the API consumers are aware.
 3. An API server MUST inform client app(s) regarding deprecated elements present in request and/or response at runtime so that tools can recognize this, log warnings and highlight the usage of deprecated elements as needed.
 4. Deprecated `API Elements` must remain supported for the life of the major version or until customers are no longer using them (the means to determine this are left to the discretion of the API owner since it's their customers who will ultimately be impacted).
 
 <h2 id="deprecation-solution">Solution</h2>
 
-The following describes how to address the requirements listed above. The solution involves addressing documentation related requirement using an annotation and using a custom header to address the runtime related requirement. 
+The following describes how to address the requirements listed above. The solution involves addressing documentation related requirement using an annotation and using a custom header to address the runtime related requirement.
 
 1. [Documentation](#deprecation-documentation)
 2. [Runtime](#deprecation-runtime)
@@ -2057,7 +1996,7 @@ An optional annotation named `x-deprecated` is used to mark an `API Element` as 
 
 `x-deprecated` can be used to deprecate any kind of `API Element`. The annotation should be used inline precisely where the `API Element` is defined. It is expected that the API tools generating documentation by introspecting the API definition would recognize this annotation and highlight the corresponding `API Element` as deprecated. It is also assumed that this annotation can be completely ignored by tools including those generating implementation bindings (POJO). In other words, it is not in scope of this solution that any implementation language specific construct (such as Java annotation `@deprecated`) would be generated for the `x-deprecated` annotation.
 
-It is expected that the API documentation would highlight deprecated `API Elements` annotated by `x-deprecated` in the API specification distinctly and at the appropriate granularity. 
+It is expected that the API documentation would highlight deprecated `API Elements` annotated by `x-deprecated` in the API specification distinctly and at the appropriate granularity.
 
 <h4 id="deprecation-schema-annotation">Schema for x-deprecated Annotation</h4>
 
@@ -2069,42 +2008,41 @@ Following are common schema types that are used across new JSON object types to 
 
 ```
 
-		"x-deprecatedValue": {
-			"type": "string",
-			"description": "Value of the element that is deprecated. Use to deprecate a particular value in parameter or schema property as applicable."
-		},
-		"x-deprecatedSee": {
-			"type": "string",
-			"description": "URI (indirect or absolute) or name of to new parameter, resource, method, api_element, as applicable."
-		},
-		"x-apiVersion": {
-			"pattern": "^[1-9][0-9]*[.][0-9]+$",
-			"minLength": 3,
-			"maxLength": 8,
-			"description": "This string should contain the release or version number at which this schema element became deprecated. Version should be in the format '{major}.{minor}' (no leading 'v')."
-		}
+        "x-deprecatedValue": {
+            "type": "string",
+            "description": "Value of the element that is deprecated. Use to deprecate a particular value in parameter or schema property as applicable."
+        },
+        "x-deprecatedSee": {
+            "type": "string",
+            "description": "URI (indirect or absolute) or name of to new parameter, resource, method, api_element, as applicable."
+        },
+        "x-apiVersion": {
+            "pattern": "^[1-9][0-9]*[.][0-9]+$",
+            "minLength": 3,
+            "maxLength": 8,
+            "description": "This string should contain the release or version number at which this schema element became deprecated. Version should be in the format '{major}.{minor}' (no leading 'v')."
+        }
 
 ```
 
 <h5 id="deprecation-schema-resource">Deprecated Resource</h5>
 
-The following schema MUST be used to deprecate resource objects in `API definition`. Examples of resource object in `swagger.json` are: `operation` and `paths`. 
-
+The following schema MUST be used to deprecate resource objects in `API definition`. Examples of resource object in `swagger.json` are: `operation` and `paths`.
 
 ```
-		"x-deprecatedResource": {
-			"type": "object",
-			"title": "Schema for a deprecated resource.",
-			"description": "Schema for deprecating a resource API element. A resource API element could be an operation or paths.",
-			"properties": {
-				"see": {
-					"$ref": "#/definitions/x-deprecatedSee"
-				},
-				"since_version": {
-					"$ref": "#/definitions/x-apiVersion"
-				}
-			}
-		}
+        "x-deprecatedResource": {
+            "type": "object",
+            "title": "Schema for a deprecated resource.",
+            "description": "Schema for deprecating a resource API element. A resource API element could be an operation or paths.",
+            "properties": {
+                "see": {
+                    "$ref": "#/definitions/x-deprecatedSee"
+                },
+                "since_version": {
+                    "$ref": "#/definitions/x-apiVersion"
+                }
+            }
+        }
 ```
 
 The following section provides several examples showing usage of `deprecatedResource` for `x-deprecated` annotation at resource level.
@@ -2113,21 +2051,19 @@ The following section provides several examples showing usage of `deprecatedReso
 
 The following example shows deprecated resource named `commercial-entities` in `swagger.json`.
 
-
 ```
     "paths": {
        
         "/commercial-entities": {
              "x-deprecated": {
-            		"see": "financial-entities",
-            		"since_version": "1.4"
-            	},
+                    "see": "financial-entities",
+                    "since_version": "1.4"
+                },
         ...
         }
 
 ```
-		
-
+        
 
 <h6 id="deprecation-example-method">Example: Deprecated Method</h6>
 
@@ -2140,10 +2076,10 @@ The following example shows a deprecated method `PUT /commercial-entities/{merch
                 "summary": "Updates the Commercial Entity Agreements Details for a Merchant.",
                 "operationId": "commercial-entity.agreement.update",
                 "x-deprecated": {
-            			"see": "patch",
-            			"since_version": "1.4"
-            	},
-            	"parameters": [
+                        "see": "patch",
+                        "since_version": "1.4"
+                },
+                "parameters": [
                     {
                         "name": "merchant_id",
                         "in": "path",
@@ -2170,22 +2106,22 @@ The following example shows a deprecated method `PUT /commercial-entities/{merch
 `swagger.json` provides a way to define one or more parameter for a method. The type of parameters are: path, query and header. Typically, query and header parameters can be deprecated. The following schema MUST be used while using `x-deprecated` annotation for a parameter.
 
 ```
-		"x-deprecatedParameter": {
-			"type": "object",
-			"title": "Schema for a deprecated parameter.",
-			"description": "Schema for deprecating an API element inline. The API element could be a custom HTTP header or a query param.",
-			"properties": {
-				"value": {
-					"$ref": "#/definitions/x-deprecatedValue"
-				},
-				"see": {
-					"$ref": "#/definitions/x-deprecatedSee"
-				},
-				"since_version": {
-					"$ref": "#/definitions/x-apiVersion"
-				}
-			}
-		}
+        "x-deprecatedParameter": {
+            "type": "object",
+            "title": "Schema for a deprecated parameter.",
+            "description": "Schema for deprecating an API element inline. The API element could be a custom HTTP header or a query param.",
+            "properties": {
+                "value": {
+                    "$ref": "#/definitions/x-deprecatedValue"
+                },
+                "see": {
+                    "$ref": "#/definitions/x-deprecatedSee"
+                },
+                "since_version": {
+                    "$ref": "#/definitions/x-apiVersion"
+                }
+            }
+        }
 ```
 
 The following section provides several examples showing usage of `deprecatedParameter` for `x-deprecated` annotation at parameter level.
@@ -2225,11 +2161,9 @@ The following example shows usage of the `x-deprecated` annotation in `swagger.j
 ```
 
 
-
 <h6 id="deprecation-example-header">Example: Deprecated Header</h6>
 
 The following example shows a deprecated custom HTTP header called `CLIENT_INFO`.
-
 
 ###### OpenAPI
 
@@ -2254,12 +2188,9 @@ The following example shows a deprecated custom HTTP header called `CLIENT_INFO`
                     ...
 ```
 
-
 <h6 id="deprecation-example-query-parameter-value">Example: Deprecated Query Parameter Value</h6>
 
-
 The following example shows usage of the `x-deprecated` annotation in `swagger.json` to indicate deprecation of a specific value (`y`) for a query parameter named `fields`.
-
 
 ```
         "/commercial-entities": {
@@ -2292,53 +2223,50 @@ The following example shows usage of the `x-deprecated` annotation in `swagger.j
 
 <h5 id="deprecation-schema-object">Deprecated JSON Object Schema</h5>
 
-In order to deprecate a schema of JSON Object itself or one or more properties within the JSON Object schema, we recommend using a schema called `deprecatedSchema` for the `x-deprecated` annotation. 
-
-
-```
-		"x-deprecatedSchema": {
-			"type": "array",
-			"description": "Schema for a collection of deprecated items in a schema.",
-			"items": {
-				"$ref": "#/definitions/x-deprecatedSchemaProperty"
-			}
-		}
-```
+In order to deprecate a schema of JSON Object itself or one or more properties within the JSON Object schema, we recommend using a schema called `deprecatedSchema` for the `x-deprecated` annotation.
 
 ```
-		"x-deprecatedSchemaProperty": {
-			"type": "object",
-			"title": "Schema for a deprecated schema property or schema itself.",
-			"description": "Schema for deprecating an API element within JSON Object schema. The API element could be an individual property of a schema of a JSON type or an entire schema representing JSON object.",
-			"required": ["api_element"],
-			"properties": {
-				"api_element": {
-					"type": "string",
-					"description": "JSON pointer to API element that is deprecated. If the API element is JSON Object schema of a type itself, JSON pointer MUST point to the root of that schema. If the API element is a property of schema, the JSON pointer MUST point to that property."
-				},
-				"value": {
-					"$ref": "#/definitions/x-deprecatedValue"
-				},
-				"see": {
-					"$ref": "#/definitions/x-deprecatedSee"
-				},
-				"since_version": {
-					"$ref": "#/definitions/x-apiVersion"
-				}
-			}
-		}
-		
+        "x-deprecatedSchema": {
+            "type": "array",
+            "description": "Schema for a collection of deprecated items in a schema.",
+            "items": {
+                "$ref": "#/definitions/x-deprecatedSchemaProperty"
+            }
+        }
 ```
 
-In order to avoid extending JSON draft-04 schema with `keywords` needed to either deprecate the schema itself by using `x-annotation` in metadata section of the schema or deprecate individual properties inline, we have chosen a less disruptive route of using `x-annotation` next to references for JSON Object in `API definition`. Therefore, this annotation SHOULD be used in `API definition` where schema is "referred". In case if you are OK with inlining, you should go ahead and annotate individual deprecated properties in schema or schema itself. 
+```
+        "x-deprecatedSchemaProperty": {
+            "type": "object",
+            "title": "Schema for a deprecated schema property or schema itself.",
+            "description": "Schema for deprecating an API element within JSON Object schema. The API element could be an individual property of a schema of a JSON type or an entire schema representing JSON object.",
+            "required": ["api_element"],
+            "properties": {
+                "api_element": {
+                    "type": "string",
+                    "description": "JSON pointer to API element that is deprecated. If the API element is JSON Object schema of a type itself, JSON pointer MUST point to the root of that schema. If the API element is a property of schema, the JSON pointer MUST point to that property."
+                },
+                "value": {
+                    "$ref": "#/definitions/x-deprecatedValue"
+                },
+                "see": {
+                    "$ref": "#/definitions/x-deprecatedSee"
+                },
+                "since_version": {
+                    "$ref": "#/definitions/x-apiVersion"
+                }
+            }
+        }
+        
+```
+
+In order to avoid extending JSON draft-04 schema with `keywords` needed to either deprecate the schema itself by using `x-annotation` in metadata section of the schema or deprecate individual properties inline, we have chosen a less disruptive route of using `x-annotation` next to references for JSON Object in `API definition`. Therefore, this annotation SHOULD be used in `API definition` where schema is "referred". In case if you are OK with inlining, you should go ahead and annotate individual deprecated properties in schema or schema itself.
 
 As of March 2017, [OpenAPI 3.0.0-rc0](https://github.com/OAI/OpenAPI-Specification/blob/OpenAPI.next/versions/3.0.md) has introduced `deprecated` flag to apply at operation, parameter and schema field levels. `x-annotation` could be used alongside the `deprecated` flag to provide additional useful information for the deprecated `API Element`.
-
 
 <h6 id="deprecation-example-schema-property">Example: Deprecated Property In Response</h6>
 
 The following example shows usage of the `x-deprecated` annotation in `API definitions` to indicate deprecation of a property named `address` in response.
-
 
 
 ```
@@ -2353,12 +2281,12 @@ The following example shows usage of the `x-deprecated` annotation in `API defin
                         "schema": {
                             "$ref": "./model/interaction/commercial-entities/merchant_id/get_response.json",
                             "x-deprecated": [
-            					   {
-            						  "api_element": "./model/interaction/commercial-entities/merchant_id/get_response.json#/address",
-            						  "see": "./model/interaction/commercial-entities/merchant_id/get_response.json#/global_address",
-            						  "since_version": "1.4"
-            					   }
-            				    ] 
+                                   {
+                                      "api_element": "./model/interaction/commercial-entities/merchant_id/get_response.json#/address",
+                                      "see": "./model/interaction/commercial-entities/merchant_id/get_response.json#/global_address",
+                                      "since_version": "1.4"
+                                   }
+                                ] 
                         }
                     },
                     "default": {
@@ -2374,7 +2302,6 @@ The following example shows usage of the `x-deprecated` annotation in `API defin
 
 The following example shows usage of the `x-deprecated` annotation in `API definitions` to indicate deprecation of an enum `FAILED` used by a property named `state`.
 
-
 ```
        "/commercial-entities/{merchant_id}": {
             "get": {
@@ -2387,12 +2314,12 @@ The following example shows usage of the `x-deprecated` annotation in `API defin
                         "schema": {
                             "$ref": "./model/interaction/commercial-entities/merchant_id/get_response.json",
                             "x-deprecated": [
-            					   {
-            						  "api_element": "./model/interaction/commercial-entities/merchant_id/get_response.json#/state",
-            						  "value": "FAILED",
-            						  "since_version": "1.4"
-            					   }
-            				    ] 
+                                   {
+                                      "api_element": "./model/interaction/commercial-entities/merchant_id/get_response.json#/state",
+                                      "value": "FAILED",
+                                      "since_version": "1.4"
+                                   }
+                                ] 
                         }
                     },
                     "default": {
@@ -2402,19 +2329,19 @@ The following example shows usage of the `x-deprecated` annotation in `API defin
                         }
                     }
                 }
-			
+            
 
 ```
 
 <h3 id="deprecation-runtime">Runtime</h3>
 
-The API server MUST inform client app(s) of the deprecated `API element`(s) present in request and/or response. 
+The API server MUST inform client app(s) of the deprecated `API element`(s) present in request and/or response.
 
 <h4 id="deprecation-header">Header: Foo-Deprecated</h4>
 
 It is recommended to use a custom HTTP header named `Foo-Deprecated` to convey deprecation related information. The service MUST respond with the `Foo-Deprecated` header in the following cases:
 
-1. The caller has used one or more deprecated element in request. 
+1. The caller has used one or more deprecated element in request.
 2. There is one or more deprecated element in the response.
 
 In order to avoid bloating the responses with static information related to deprecation that does not change from response to response on the same end point, we recommend that API developers provide just an empty JSON object as a value as shown below. In the future, we plan to replace this with something that still does not bloat the responses but still provides enough information so that tools could scan responses for deprecation and take appropriate actions such as notifying App developers/administrators.
@@ -2423,7 +2350,7 @@ In order to avoid bloating the responses with static information related to depr
 "Foo-Deprecated": "{}"
 ```
 
-**Note**: Applications consuming this header MUST not take any action based on the value of the header at this time. Instead, we recommend that these applications SHOULD take action based only on the existence of the header in the response. 
+**Note**: Applications consuming this header MUST not take any action based on the value of the header at this time. Instead, we recommend that these applications SHOULD take action based only on the existence of the header in the response.
 
 References
 
@@ -2431,11 +2358,9 @@ References
 2. [How and When to Deprecate APIs](http://docs.oracle.com/javase/7/docs/technotes/guides/javadoc/deprecation/deprecation.html)
 3. [Semantic Versioning 2.0](http://semver.org/)
 
-
 <h1 id="patterns-and-use-cases">Patterns And Use Cases</h1>
 
 Please refer to [Patterns And Use Cases](patterns.md).
-
 
 [0]: https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm "RESTful Architectural Style"
 [1]: https://tools.ietf.org/html/rfc5988#section-4 "Link Relation Type"
@@ -2468,7 +2393,6 @@ Please refer to [Patterns And Use Cases](patterns.md).
 [28]: v1/schema/json/draft-04/error_details.json "error_details.json"
 [29]: http://techbus.safaribooksonline.com/book/web-development/web-services/9780596809140 "RESTful Web Services Cookbook"
 [30]: http://json.org/ "JSON"
-
 
 
 
