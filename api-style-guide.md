@@ -918,7 +918,7 @@ For more specific info on the query parameter usage, see [URI Standards](#uri-st
 
 The data model for the representation MUST conform to [JSON][30]. The values may themselves be objects, strings, numbers, booleans, or arrays of objects.
 
-* Key names MUST be lower-case words, separated by an underscore character, ( _ ).
+* Key names MUST camel cased words.
     * `foo`
     * `bar_baz`
 * Prefix such as `is_` or `has_` SHOULD NOT be used for keys of type boolean. 
