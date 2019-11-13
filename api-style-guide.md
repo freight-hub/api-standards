@@ -781,7 +781,8 @@ See [HATEOAS Use Cases](patterns.md#hateoas-use-cases) to find where HATEOAS cou
 
 <h1 id="naming-conventions">Naming Conventions</h1>
 
-Naming conventions for URIs, query parameters, resources, fields and enums are described in this section. Let us emphasize here that these guidelines are less about following the conventions exactly as described here but they are more about defining some naming conventions and sticking to them in a consistent manner while designing APIs. For example, we have followed [snake_case](https://en.wikipedia.org/wiki/Snake_case) for field and file names, however, you could use other forms such as [CamelCase](https://en.wikipedia.org/wiki/Camel_case) or something else that you have devised yourself. It is important to adhere to a defined convention.
+Naming conventions for URIs, query parameters, resources, fields and enums are described in this section. Let us emphasize here that these guidelines are less about following the conventions exactly as described here but they are more about defining some naming conventions and sticking to them in a consistent manner while designing APIs.
+We have [CamelCase](https://en.wikipedia.org/wiki/Camel_case) for field and file names.
 
 <h2 id="uri-component-names">URI Component Names</h2>
 
