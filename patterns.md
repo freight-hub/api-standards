@@ -224,7 +224,7 @@ This is a **sample JSON schema** that returns a collection of resources with pag
     "type": "object",
     "required": true,
     "properties": {
-      "plans": {
+      "items": {
         "type": "array",
         "description": "Array of billing plans.",
         "items": {
@@ -281,7 +281,7 @@ This is a **sample JSON response** that returns a collection of resources with p
 {
   "totalItems": "166",
   "totalPages": "83",
-  "plans": [
+  "items": [
     {
       "id": "P-6EM196669U062173D7QCVDRA",
       "state": "ACTIVE",
