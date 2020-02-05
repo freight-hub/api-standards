@@ -10,7 +10,7 @@ The words "REST" and "RESTful" MUST be written as presented here, representing t
 
 Machine-readable text, such as URLs, HTTP verbs, and source code, are represented using a fixed-width font.
 
-URIs containing variable blocks are pecified according to [URI Template RFC 6570](https://tools.ietf.org/html/rfc6570). For example, a URL containing a variable called account_id would be shown as https://paypal.com/accounts/{account_id}/.
+URIs containing variable blocks are pecified according to [URI Template RFC 6570](https://tools.ietf.org/html/rfc6570). For example, a URL containing a variable called accountId would be shown as https://paypal.com/accounts/{accountId}/.
 
 HTTP headers are written in camelCase + hyphenated syntax, e.g. Foo-Request-Id.
 
@@ -79,19 +79,19 @@ Note that server-generated values are not provided in the request.
 ```
 POST /v1/vault/credit-cards
 {
-    "payer_id": "user12345",
+    "payerId": "user12345",
     "type": "visa",
     "number": "4417119669820331",
-    "expire_month": "11",
-    "expire_year": "2018",
-    "first_name": "Betsy",
-    "last_name": "Buyer",
-    "billing_address": {
+    "expireMonth": "11",
+    "expireYear": "2018",
+    "firstName": "Betsy",
+    "lastName": "Buyer",
+    "billingAddress": {
         "line1": "111 First Street",
         "city": "Saratoga",
-        "country_code": "US",
+        "countryCode": "US",
         "state": "CA",
-        "postal_code": "95070"
+        "postalCode": "95070"
     }
 }
 ```
@@ -104,15 +104,15 @@ On successful execution, the method returns with status code `201`.
 201 Created
 {
     "id": "CARD-1MD19612EW4364010KGFNJQI",
-    "valid_until": "2016-05-07T00:00:00Z",
+    "validUntil": "2016-05-07T00:00:00Z",
     "state": "ok",
-    "payer_id": "user12345",
+    "payerId": "user12345",
     "type": "visa",
     "number": "xxxxxxxxxxxx0331",
-    "expire_month": "11",
-    "expire_year": "2018",
-    "first_name": "Betsy",
-    "last_name": "Buyer",
+    "expireMonth": "11",
+    "expireYear": "2018",
+    "firstName": "Betsy",
+    "lastName": "Buyer",
     "links": [
         {
             "href": "https://api.sandbox.paypal.com/v1/vault/credit-cards/CARD-1MD19612EW4364010KGFNJQI",
@@ -150,36 +150,36 @@ If the service allows partial retrieval of the set, the following patterns MUST 
 
 Query parameters with regard to time range could be used to select a subset of items in the following manner:
 
-- `start_time` or `{property_name}_after`: A timestamp (in either Unix time or [ISO-8601][5] format) indicating the start of a temporal range. `start_time` may be used when there is only one unambiguous time dimension; otherwise, the property name should be used (e.g., `processed_after`, `updated_after`). The property SHOULD map to a time field in the representation.
-- `end_time` or `{property_name}_before`: A timestamp (in either Unix time or [ISO-8601][5] format) indicating the end of a temporal range. `end_time` may be used when there is only one unambiguous time dimension; otherwise, the property name should be used (e.g., `processed_before`, `updated_before`). The property SHOULD map to a time field in the representation.
+- `startTime` or `{propertyName}_after`: A timestamp (in either Unix time or [ISO-8601][5] format) indicating the start of a temporal range. `startTime` may be used when there is only one unambiguous time dimension; otherwise, the property name should be used (e.g., `processedAfter`, `updatedAfter`). The property SHOULD map to a time field in the representation.
+- `endTime` or `{propertyName}_before`: A timestamp (in either Unix time or [ISO-8601][5] format) indicating the end of a temporal range. `endTime` may be used when there is only one unambiguous time dimension; otherwise, the property name should be used (e.g., `processedBefore`, `updatedBefore`). The property SHOULD map to a time field in the representation.
 
 <h4 id="sorting">Sorting</h4>
 
 Results could be ordered according to sorting related instructions given by the client. This includes sorting by a specific field's value and sorting order as described in the query parameters below.
 
-- `sort_by`: A dimension by which items should be sorted; the dimensions SHOULD be an attribute in the item's representation; the default (ascending or descending) is left to the implementation and MUST be specified in the documentation.
-- `sort_order`: The order, one of `asc` or `desc`, indicating ascending or descending order.
+- `sortBy`: A dimension by which items should be sorted; the dimensions SHOULD be an attribute in the item's representation; the default (ascending or descending) is left to the implementation and MUST be specified in the documentation.
+- `sortOrder`: The order, one of `asc` or `desc`, indicating ascending or descending order.
 
 <h4 id="pagination">Pagination</h4>
 
 Any resource that could return a large, potentially unbounded list of resources in its `GET` response SHOULD implement pagination using the patterns described here.
 
-Sample URI path: `/accounts?page_size={page_size}&page={page}`
+Sample URI path: `/accounts?pageSize={pageSize}&page={page}`
 
 Clients MUST assume no inherent ordering of results unless a default sort order has been specified for this collection. It is RECOMMENDED that service implementers specify a default sort order whenever it would be useful.
 
 <h5 id="query">Query Parameters</h5>
 
-- `page_size`: A non-negative, non-zero integer indicating the maximum number of results to return at one time. This parameter:
+- `pageSize`: A non-negative, non-zero integer indicating the maximum number of results to return at one time. This parameter:
   - MUST be optional for the client to provide.
   - MUST have a default value, for when the client does not provide a value.
 - `page`: A non-zero integer representing the page of the results. This parameter:
   - MUST be optional for the client to provide.
   - MUST have a default value of 1 for when the client does not provide a value.
   - MUST respond to a semantically invalid page count, such as zero, with the HTTP status code `400 Bad Request`.
-  - If a page number is too large--for instance, if there are only 50 results, but the client requests `page_size=100&page=3`--the resource MUST respond with the HTTP status code `200 OK` and an empty result list.
-- `page_token`: In certain cases such as querying on a large data set, in order to optimize the query execution while paginating, querying and retrieving the data based on result set of previous page migh be appropriate. Such a `page_token` could be an encrypted value of primary keys to navigate next and previous page along with the directions.
-- `total_required`: A boolean indicating total number of items (`total_items`) and pages (`total_pages`) are expected to be returned in the response. This parameter:
+  - If a page number is too large--for instance, if there are only 50 results, but the client requests `pageSize=100&page=3`--the resource MUST respond with the HTTP status code `200 OK` and an empty result list.
+- `pageToken`: In certain cases such as querying on a large data set, in order to optimize the query execution while paginating, querying and retrieving the data based on result set of previous page migh be appropriate. Such a `pageToken` could be an encrypted value of primary keys to navigate next and previous page along with the directions.
+- `totalRequired`: A boolean indicating total number of items (`totalItems`) and pages (`totalPages`) are expected to be returned in the response. This parameter:
   - SHOULD be optional for the client to provide.
   - SHOULD have a default value of `false`.
   - MAY be used by the client in the very first request. The client MAY then cache the values returned in the response to help build subsequent requests.
@@ -191,40 +191,40 @@ JSON response to a request of this type SHOULD be an object containing the follo
 
 - `items` MUST be an array containing the current page of the result list.
 - Unless there are performance or implementation limitations:
-  - `total_items` SHOULD be used to indicate the total number of items in the full result list, not just this page.
-    - If `total_required` has been implemented by an API, then the value SHOULD only be returned when `total_required` is set to `true`.
-    - If `total_required` has not been implemented by an API, then the value MAY be returned in every response if necessary, useful, and performant.
+  - `totalItems` SHOULD be used to indicate the total number of items in the full result list, not just this page.
+    - If `totalRequired` has been implemented by an API, then the value SHOULD only be returned when `totalRequired` is set to `true`.
+    - If `totalRequired` has not been implemented by an API, then the value MAY be returned in every response if necessary, useful, and performant.
     - If present, this parameter MUST be a non-negative integer.
-    - Clients MUST NOT assume that the value of `total_items` is constant. The value MAY change from one request to the next.
-  - `total_pages` SHOULD be used to indicate how many pages are available, in total.
-    - If `total_required` has been implemented by an API, then the value SHOULD only be returned when `total_required` is set to `true`.
-    - If `total_required` has not been implemented by an API, then the value MAY be returned in every response if necessary, useful, and performant.
+    - Clients MUST NOT assume that the value of `totalItems` is constant. The value MAY change from one request to the next.
+  - `totalPages` SHOULD be used to indicate how many pages are available, in total.
+    - If `totalRequired` has been implemented by an API, then the value SHOULD only be returned when `totalRequired` is set to `true`.
+    - If `totalRequired` has not been implemented by an API, then the value MAY be returned in every response if necessary, useful, and performant.
     - If present, this parameter MUST be a non-negative, non-zero integer.
-    - Clients MUST NOT assume that the value of `total_pages` is constant. The value MAY change from one request to the next.
+    - Clients MUST NOT assume that the value of `totalPages` is constant. The value MAY change from one request to the next.
 - `links` SHOULD be an array containing one or more [HATEOAS](index.md#hypermedia) link relations that are relevant for traversing the result list.
 
 <h5 id="page-navigation">Page Navigation</h5>
 
-| Relationship | Description                                                                                                                                                                                                                           |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `self`       | Refers to the current page of the result list.                                                                                                                                                                                        |
-| `first`      | Refers to the first page of the result list. If you are using `page_token`, you may not return this link.                                                                                                                             |
-| `last`       | Refers to the last page of the result list. Returning of this link is optional. You need to return this link only if `total_required` is specified as a query parameter. If you are using `page_token`, you may not return this link. |
-| `next`       | Refers to the next page of the result list.                                                                                                                                                                                           |
-| `prev`       | Refers to the previous page of the result list.                                                                                                                                                                                       |
+| Relationship | Description                                                                                                                                                                                                                         |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `self`       | Refers to the current page of the result list.                                                                                                                                                                                      |
+| `first`      | Refers to the first page of the result list. If you are using `pageToken`, you may not return this link.                                                                                                                            |
+| `last`       | Refers to the last page of the result list. Returning of this link is optional. You need to return this link only if `totalRequired` is specified as a query parameter. If you are using `pageToken`, you may not return this link. |
+| `next`       | Refers to the next page of the result list.                                                                                                                                                                                         |
+| `prev`       | Refers to the previous page of the result list.                                                                                                                                                                                     |
 
 This is a **sample JSON schema** that returns a collection of resources with pagination:
 
 ```
 {
-    "id": "plan_list:v1",
+    "id": "planList:v1",
     "$schema": "http://json-schema.org/draft-04/schema#",
     "description": "Resource representing a list of billing plans with basic information.",
-    "name": "plan_list Resource",
+    "name": "planList Resource",
     "type": "object",
     "required": true,
     "properties": {
-      "plans": {
+      "items": {
         "type": "array",
         "description": "Array of billing plans.",
         "items": {
@@ -233,12 +233,12 @@ This is a **sample JSON schema** that returns a collection of resources with pag
           "$ref": "plan.json"
         }
       },
-      "total_items": {
+      "totalItems": {
         "type": "string",
         "readonly": true,
         "description": "Total number of items."
       },
-      "total_pages": {
+      "totalPages": {
         "type": "string",
         "readonly": true,
         "description": "Total number of pages."
@@ -252,24 +252,24 @@ This is a **sample JSON schema** that returns a collection of resources with pag
     },
     "links": [
       {
-        "href": "https://api.foo.com/v1/payments/billing-plans?page_size={page_size}&page={page}&status={status}",
+        "href": "https://api.foo.com/v1/payments/billing-plans?pageSize={pageSize}&page={page}&status={status}",
         "rel": "self"
       },
       {
          "rel": "first",
-         "href": "https://api.foo.com/v1/payments/billing-plans?page_size={page_size}&page={page}&start={start_id}&status={status}"
+         "href": "https://api.foo.com/v1/payments/billing-plans?pageSize={pageSize}&page={page}&start={startId}&status={status}"
       },
       {
          "rel": "next",
-         "href": "https://api.foo.com/v1/payments/billing-plans?page_size={page_size}&page={page+1}&status={status}"
+         "href": "https://api.foo.com/v1/payments/billing-plans?pageSize={pageSize}&page={page+1}&status={status}"
       },
       {
          "rel": "prev",
-         "href": "https://api.foo.com/v1/payments/billing-plans?page_size={page_size}&page={page-1}&status={status}"
+         "href": "https://api.foo.com/v1/payments/billing-plans?pageSize={pageSize}&page={page-1}&status={status}"
       },
       {
          "rel": "last",
-         "href": "https://api.foo.com/v1/payments/billing-plans?page_size={page_size}&page={last}&status={status}"
+         "href": "https://api.foo.com/v1/payments/billing-plans?pageSize={pageSize}&page={last}&status={status}"
       }
    ]
 }
@@ -279,17 +279,17 @@ This is a **sample JSON response** that returns a collection of resources with p
 
 ```
 {
-  "total_items": "166",
-  "total_pages": "83",
-  "plans": [
+  "totalItems": "166",
+  "totalPages": "83",
+  "items": [
     {
       "id": "P-6EM196669U062173D7QCVDRA",
       "state": "ACTIVE",
       "name": "Testing1-Regular3",
       "description": "Create Plan for Regular",
       "type": "FIXED",
-      "create_time": "2014-08-22T04:41:52.836Z",
-      "update_time": "2014-08-22T04:41:53.169Z",
+      "createTime": "2014-08-22T04:41:52.836Z",
+      "updateTime": "2014-08-22T04:41:53.169Z",
       "links": [
         {
             "href": "https://api.foo.com/v1/payments/billing-plans/P-6EM196669U062173D7QCVDRA",
@@ -303,8 +303,8 @@ This is a **sample JSON response** that returns a collection of resources with p
       "name": "Testing1-Regular4",
       "description": "Create Plan for Regular",
       "type": "INFINITE",
-      "create_time": "2014-08-22T04:41:55.623Z",
-      "update_time": "2014-08-22T04:41:56.055Z",
+      "createTime": "2014-08-22T04:41:55.623Z",
+      "updateTime": "2014-08-22T04:41:56.055Z",
       "links": [
         {
             "href": "https://api.foo.com/v1/payments/billing-plans/P-83567698LH138572V7QCVZJY",
@@ -315,23 +315,23 @@ This is a **sample JSON response** that returns a collection of resources with p
   ],
   "links": [
     {
-      "href": "https://api.foo.com/v1/payments/billing-plans?page_size=2&page=3&status=active",
+      "href": "https://api.foo.com/v1/payments/billing-plans?pageSize=2&page=3&status=active",
       "rel": "self"
     },
     {
-      "href": "https://api.foo.com/v1/payments/billing-plans?page_size=2&page=1&first=3&status=active",
+      "href": "https://api.foo.com/v1/payments/billing-plans?pageSize=2&page=1&first=3&status=active",
       "rel": "first"
     },
     {
-      "href": "https://api.foo.com/v1/payments/billing-plans?page_size=2&page=2&status=active",
+      "href": "https://api.foo.com/v1/payments/billing-plans?pageSize=2&page=2&status=active",
       "rel": "prev"
     },
     {
-      "href": "https://api.foo.com/v1/payments/billing-plans?page_size=2&page=4&status=active",
+      "href": "https://api.foo.com/v1/payments/billing-plans?pageSize=2&page=4&status=active",
       "rel": "next"
     },
     {
-      "href": "https://api.foo.com/v1/payments/billing-plans?page_size=2&page=82&status=active",
+      "href": "https://api.foo.com/v1/payments/billing-plans?pageSize=2&page=82&status=active",
       "rel": "last"
     }
   ]
@@ -362,12 +362,12 @@ All identifiers for sensitive data should be non-sequential, and preferably non-
 
 ```
 {
-	 "merchant_customer_id": "merchant-1",
-    "merchant_id": "target",
-    "create_time": "2014-10-10T16:10:55Z",
-    "update_time": "2014-10-10T16:10:55Z",
-    "first_name": "Kartik",
-    "last_name": "Hattangadi"
+	 "merchantCustomerId": "merchant-1",
+    "merchantId": "target",
+    "createTime": "2014-10-10T16:10:55Z",
+    "updateTime": "2014-10-10T16:10:55Z",
+    "firstName": "Kartik",
+    "lastName": "Hattangadi"
 }
 ```
 
@@ -400,7 +400,7 @@ To perform an update to an entire resource, `PUT` method MUST be utilized. The s
 
 If the update is successful, a `204 No Content` HTTP status code (with no response body) is appropriate. Where there is a justifying use case (typically to optimize some client interaction), a `200 OK` HTTP status code with a response body can be utilized.
 
-While the entire resource's representation must be supplied with the `PUT` method, the APIs validation logic can enforce constraints regarding fields that are allowed to be updated. These fields can be specified as [`readOnly`](index.md#json-schema) in the JSON schema. Fields in the request body can be optional or ignored during deserialization, such as `create_time` or other system-calculated values. Typical error handling, utilizing the `400 Bad Request` status code, should be applied in cases where the client attempts to update fields which are not allowed or if the resource is in a non-updateable state.
+While the entire resource's representation must be supplied with the `PUT` method, the APIs validation logic can enforce constraints regarding fields that are allowed to be updated. These fields can be specified as [`readOnly`](index.md#json-schema) in the JSON schema. Fields in the request body can be optional or ignored during deserialization, such as `createTime` or other system-calculated values. Typical error handling, utilizing the `400 Bad Request` status code, should be applied in cases where the client attempts to update fields which are not allowed or if the resource is in a non-updateable state.
 
 See [Sample Input Validation Error Response](index.md#sampleresponse-multi) for examples of error handling.
 
@@ -415,12 +415,12 @@ PUT /{version}/{namespace}/{resource}/{resource-id}
 ```
 PUT /v1/vault/customers/CUSTOMER-66W27667YB813414MKQ4AKDY
 {
-	"merchant_customer_id": "merchant-1",
-    "merchant_id": "target",
-    "create_time": "2014-10-10T16:10:55Z",
-    "update_time": "2014-10-10T16:10:55Z",
-    "first_name": "Kartik",
-    "last_name": "Hattangadi"
+	"merchantCustomerId": "merchant-1",
+    "merchantId": "target",
+    "createTime": "2014-10-10T16:10:55Z",
+    "updateTime": "2014-10-10T16:10:55Z",
+    "firstName": "Kartik",
+    "lastName": "Hattangadi"
 }
 ```
 
@@ -498,12 +498,12 @@ In cases where ETags are not available to provide concurrency protection when up
 `"path": "/object-name/@filter-expression/attribute-name"`
 
 - `object-name` is the name of the collection.The symbol “@” refers to the current object. It also signals the beginning of a filter-expression.
-- The `filter-expression` SHOULD only contain the following operators: a comparison operator (`==` for equality) or a Logical AND (`&&`) operator or both. For example:`”/address/@id==123/street_name”, “address/@id==123 && primary==true”` are valid filter expressions.
-- The right hand side operand for the operator “==” MUST have a value that matches the type of the left hand side operand. For example: `“addresss/@integer_id == 123”,”/address/@string_name == ‘james’”,”/address/@boolean_primary == true”,/address/@decimal_number == 12.1` are valid expressions.
+- The `filter-expression` SHOULD only contain the following operators: a comparison operator (`==` for equality) or a Logical AND (`&&`) operator or both. For example:`”/address/@id==123/streetName”, “address/@id==123 && primary==true”` are valid filter expressions.
+- The right hand side operand for the operator “==” MUST have a value that matches the type of the left hand side operand. For example: `“addresss/@integerId == 123”,”/address/@stringName == ‘james’”,”/address/@booleanPrimary == true”,/address/@decimalNumber == 12.1` are valid expressions.
 - If the right hand operand of "==" is a string then it SHOULD NOT contain any of the following escape sequences: a Line Continuation or a Unicode Escape Sequence.
 - attribute-name is the name of the attribute to which a `PATCH` operation is applied if the filter condition is met.
 
-<h5 id="patch_array_examples">PATCH Array Examples</h5>
+<h5 id="patch-array-examples">PATCH Array Examples</h5>
 
 **Example1:**
 
@@ -513,9 +513,9 @@ This would set the array element "primary" to true if the the element "id" has a
 
 **Example2:**
 
-`"op": "replace","path": “/address/@country_code==’GB’ && type==’office’/active”,"value": true`<br />
+`"op": "replace","path": “/address/@countryCode==’GB’ && type==’office’/active”,"value": true`<br />
 
-This would set the array element "active" to true if the the element "country_code" equals to "GB" and type equals to "office".
+This would set the array element "active" to true if the the element "countryCode" equals to "GB" and type equals to "office".
 
 <h4 id="other-considerations">Other Implementation Considerations For PATCH</h4>
 
@@ -530,7 +530,7 @@ It is not necessary that an API support the updating of all attributes via a `PA
 
 See [Sample Input Validation Error Response](index.md#sampleresponse-multi) for examples of error handling.
 
-<h4 id="patch_examples">PATCH Examples</h4>
+<h4 id="patch-examples">PATCH Examples</h4>
 
 `PATCH` examples for modifying objects can be found in [RFC 6902][6].
 
@@ -546,7 +546,7 @@ The following example shows the use of the fields parameter with users API.
 
 ```
 GET https://api.foo.com/v1/users/bob
-Authorization: Bearer your_auth_token
+Authorization: Bearer yourAuthToken
 ```
 
 **Response**: The complete resource representation is returned in the response.
@@ -554,7 +554,7 @@ Authorization: Bearer your_auth_token
 ```
 {
     "uid": "dbrown",
-    "given_name": "David",
+    "givenName": "David",
     "sn": "Brown",
     "location": "Austin",
     "department": "RISK",
@@ -572,7 +572,7 @@ Authorization: Bearer your_auth_token
 ```
 
 GET https://api.foo.com/v1/users/bob?fields=department,title,location
-Authorization: Bearer your_auth_token
+Authorization: Bearer yourAuthToken
 ```
 
 The response has only fields specified by the `fields` query parameter as well as mandatory fields.
@@ -677,12 +677,12 @@ The API client sends a new `POST` request with the `Foo-Request-Id` header that 
 POST /v1/payments/referenced-payouts-items HTTP/1.1
 Host: api.foo.com
 Content-Type: application/json
-Authorization: Bearer oauth2_token
+Authorization: Bearer oauth2Token
 Foo-Request-Id: 123e4567-e89b-12d3-a456-426655440000
 
 {
-	"reference_id": "4766687568468",
-	"reference_type": "egflf465vbk7468mvnb"
+	"referenceId": "4766687568468",
+	"referenceType": "egflf465vbk7468mvnb"
 }
 ```
 
@@ -698,7 +698,7 @@ Content-Type: application/json
 
 {
 
-  "item_id": "CDZEC5MJ8R5HY",
+  "itemId": "CDZEC5MJ8R5HY",
   "links": [{
       "href": "https://api.foo.com/v1/payments/referenced-payouts-items/CDZEC5MJ8R5HY",
       "rel": "self",
@@ -719,13 +719,13 @@ The API client sends a `POST` request with the same `idempotency key` and input 
 POST /v1/payments/referenced-payouts-items HTTP/1.1
 Host: api.foo.com
 Content-Type: application/json
-Authorization: Bearer oauth2_token
+Authorization: Bearer oauth2Token
 Foo-Request-Id: 123e4567-e89b-12d3-a456-426655440000
 
 
 {
-	"reference_id": "4766687568468",
-	"reference_type": "egflf465vbk7468mvnb"
+	"referenceId": "4766687568468",
+	"referenceType": "egflf465vbk7468mvnb"
 }
 ```
 
@@ -740,18 +740,18 @@ HTTP/1.1 200 OK
 Content-Type: application/json
 
 {
-	"item_id": "CDZEC5MJ8R5HY",
-	"processing_state": {
+	"itemId": "CDZEC5MJ8R5HY",
+	"processingState": {
 		"status": "PROCESSING"
 	},
-	"reference_id": "4766687568468",
-	"reference_type": "egflf465vbk7468mvnb",
-	"payout_amount": {
-		"currency_code": "USD",
+	"referenceId": "4766687568468",
+	"referenceType": "egflf465vbk7468mvnb",
+	"payoutAmount": {
+		"currencyCode": "USD",
 		"value": "2.0"
 	},
-	"payout_destination": "9C8SEAESMWFKA",
-	"payout_transaction_id": "35257aef-54f7-43cf-a258-3b45caf3293",
+	"payoutDestination": "9C8SEAESMWFKA",
+	"payoutTransactionId": "35257aef-54f7-43cf-a258-3b45caf3293",
 	"links": [{
 				"href": "https://api.foo.com/v1/payments/referenced-payouts-items/CDZEC5MJ8R5HY",
 				"rel": "self",
@@ -781,9 +781,9 @@ Certain types of operations might require processing of the request in an asynch
 - Return the `202 Accepted` HTTP response code.
 - In the response body, include one or more URIs as hypermedia links, which could include:
   - The final URI of the resource where it will be available in future if the ID and path are already known. Clients can then make an HTTP `GET` request to that URI in order to obtain the completed resource. Until the resource is ready, the final URI SHOULD return the HTTP status code `404 Not Found`.
-    `{ "rel": "self", "href": "/v1/namespace/resources/{resource_id}", "method": "GET" }`
+    `{ "rel": "self", "href": "/v1/namespace/resources/{resourceId}", "method": "GET" }`
   - A temporary request queue URI where the status of the operation may be obtained via some temporary identifier. Clients SHOULD make an HTTP `GET` request to obtain the status of the operation which MAY include such information as completion state, ETA, and final URI once it is completed.
-    `{ "rel": "self", "href": "/v1/queue/requests/{request_id}, "method": "GET" }"`
+    `{ "rel": "self", "href": "/v1/queue/requests/{requestId}, "method": "GET" }"`
 
 **_For `PUT`/`PATCH`/`DELETE`/`GET` requests_:**
 
@@ -791,7 +791,7 @@ Like `POST`, you can support PUT/`PATCH`/`DELETE`/`GET` to be asynchronous. The 
 
 - Return the `202 Accepted` HTTP response code.
 - In the response body, include one or more URIs as hypermedia links, which could include: \* A temporary request queue URI where the status of the operation may be obtained via some temporary identifier. Clients SHOULD make an HTTP `GET` request to obtain the status of the operation which MAY include such information as completion state, ETA, and final URI once it is completed.
-  `{ "rel": "self", "href": "/v1/queue/requests/{request_id}, "method": "GET" }"`
+  `{ "rel": "self", "href": "/v1/queue/requests/{requestId}, "method": "GET" }"`
 
 **_APIs that support both synchronous and asynchronous processing for an URI_:**
 
@@ -904,12 +904,12 @@ PATCH /v1/payments/billing-agreements/I-0LN988D3JACS
         "path": "/",
         "value": {
             "description": "New Description",
-            "shipping_address": {
+            "shippingAddress": {
                 "line1": "2065 Hamilton Ave",
                 "city": "San Jose",
                 "state": "CA",
-                "postal_code": "95125",
-                "country_code": "US"
+                "postalCode": "95125",
+                "countryCode": "US"
             }
         }
     }
@@ -939,15 +939,15 @@ POST /v1/payments/captures/{capture-id}/refund
 ```
 {
     "id": "0P209507D6694645N",
-    "create_time": "2013-05-06T22:11:51Z",
-    "update_time": "2013-05-06T22:11:51Z",
+    "createTime": "2013-05-06T22:11:51Z",
+    "updateTime": "2013-05-06T22:11:51Z",
     "state": "completed",
     "amount": {
         "total": "110.54",
         "currency": "USD"
     },
-    "capture_id": "8F148933LY9388354",
-    "parent_payment": "PAY-8PT597110X687430LKGECATA",
+    "captureId": "8F148933LY9388354",
+    "parentPayment": "PAY-8PT597110X687430LKGECATA",
     "links": [
         {
             "href": "https://api.foo.com/v1/payments/refund/0P209507D6694645N",
@@ -956,7 +956,7 @@ POST /v1/payments/captures/{capture-id}/refund
         },
         {
             "href": "https://api.foo.com/v1/payments/payment/PAY-8PT597110X687430LKGECATA",
-            "rel": "parent_payment",
+            "rel": "parentPayment",
             "method": "GET"
         },
         {
@@ -1019,7 +1019,7 @@ This allows for hypermedia links to provide `next`, `previous`, `first`, `last` 
 
     POST /v1/factory/widgets-search
     {
-    	"created_before":"1975-05-13",
+    	"createdBefore":"1975-05-13",
     	"status": "ACTIVE",
     	"vendor": "Parts Inc."
     }
@@ -1033,12 +1033,12 @@ This allows for hypermedia links to provide `next`, `previous`, `first`, `last` 
     	]
     	"links": [
                 {
-                    "href": "https://api.sandbox.factory.io/v1/factory/widgets-search?page=2&page_size=10",
+                    "href": "https://api.sandbox.factory.io/v1/factory/widgets-search?page=2&pageSize=10",
                     "rel": "next",
                     "method": "POST"
                 },
     			{
-                    "href": "https://api.sandbox.factory.io/v1/factory/widgets-search?page=124&page_size=10",
+                    "href": "https://api.sandbox.factory.io/v1/factory/widgets-search?page=124&pageSize=10",
                     "rel": "last",
                     "method": "POST"
                 },
@@ -1071,21 +1071,21 @@ _The client first uploads the file using a file-upload URI provided by the servi
 
 POST /v1/identity/limit-resolution-files
 
-Content-Type: multipart/form-data; boundary=--foo_bar_baz
+Content-Type: multipart/form-data; boundary=--fooBarBaz
 Authorization: Bearer YOUR_ACCESS_TOKEN_HERE
 MIME-Version: 1.0
 
---foo_bar_baz
+--fooBarBaz
 Content-Type: text/plain
 Content-Disposition: form-data; name="title"
 
 Identity Document
---foo_bar_baz
+--fooBarBaz
 Content-Type: image/jpeg
 Content-Disposition: form-data; filename="passport.jpg"; name="artifact"
 
 ...(binary bytes of the image)...
---foo_bar_baz--
+--fooBarBaz--
 ```
 
 **Sample file upload response:**
@@ -1094,10 +1094,10 @@ _If the file upload is successful, the server responds with the metadata of the 
 
 ```
 {
-    "id": "file_egflf465vbk7468mvnb",
-    "created_at": 748557607545,
+    "id": "fileEgflf465vbk7468mvnb",
+    "createdAt": 748557607545,
     "size" : 3457689458369,
-    "url" : "https://api.foo.com/v1/files/file_egflf465vbk7468mvnb"
+    "url" : "https://api.foo.com/v1/files/fileEgflf465vbk7468mvnb"
     "type" : "image/jpeg"
 }
 ```
@@ -1110,11 +1110,11 @@ The client can use the uploaded file's URI (received in the above response) for 
 POST /v1/identity/limits-resolutions
 Host: api.foo.com
 Content-Type: application/json
-Authorization: Bearer oauth2_token
+Authorization: Bearer oauth2Token
 
 {
     ...
-    "identity_document_reference" : "https://api.foo.com/v1/files/file_egflf465vbk7468mvnb"
+    "identityDocumentReference" : "https://api.foo.com/v1/files/fileEgflf465vbk7468mvnb"
 
 }
 ```
@@ -1132,21 +1132,21 @@ _The first part in the below multipart request is the request metadata, while th
 ```
 POST /v1/identity/limits-resolutions
 Host: api.foo.com
-Content-Type: multipart/related; boundary=--foo_bar_baz
-Authorization: Bearer oauth2_token
+Content-Type: multipart/related; boundary=--fooBarBaz
+Authorization: Bearer oauth2Token
 
---foo_bar_baz
+--fooBarBaz
 Content-Type: application/json; charset=UTF-8
 
 {
   ...
 }
 
---foo_bar_baz
+--fooBarBaz
 Content-Type: image/jpeg
 
 [JPEG_DATA]
---foo_bar_baz--
+--fooBarBaz--
 
 ```
 
@@ -1211,7 +1211,7 @@ The service, however, finds that the user account is currently not active. So it
 HTTP/1.1 422 Unprocessable Entity
 {
     "name":"INVALID_OPERATION",
-    "debug_id":"123456789",
+    "debugId":"123456789",
     "message":"update to an inactive account is not supported",
     "links": [
         {
@@ -1242,7 +1242,7 @@ Order is in PENDING state so the services returns the `cancel` HATEOAS link.
 GET v1/checkout/orders/52181732T9513405D HTTP/1.1
 Host: api.foo.com
 Content-Type: application/json
-Authorization: Bearer oauth2_token
+Authorization: Bearer oauth2Token
 ```
 
 ###### Response
@@ -1251,7 +1251,7 @@ Authorization: Bearer oauth2_token
 HTTP/1.1 200 OK
 Content-Type: application/json
 {
-    "payment_details":{
+    "paymentDetails":{
         ...
     },
     "status":"PENDING",
@@ -1280,7 +1280,7 @@ Order is in COMPLETED state so the services does not return the `cancel` link an
 GET v1/checkout/orders/52181732T9513405D HTTP/1.1
 Host: api.foo.com
 Content-Type: application/json
-Authorization: Bearer oauth2_token
+Authorization: Bearer oauth2Token
 ```
 
 ###### Response
@@ -1289,7 +1289,7 @@ Authorization: Bearer oauth2_token
 HTTP/1.1 200 OK
 Content-Type: application/json
 {
-    "payment_details":{
+    "paymentDetails":{
         ...
     },
     "status":"COMPLETED",
@@ -1332,35 +1332,35 @@ Each bulk request is a single HTTP request to one target API endpoint. This exam
 ```
 POST /v1/devices/cards HTTP/1.1
 Host: api.foo.com
-Content-Length: total_content_length
+Content-Length: totalContentLength
 
 {
 	...
 
   	"items": [
 	{
-		"account_number": "2097094104180012037",
-		"address_id": "466354",
-		"phone_id": "0",
-		"first_name": "M",
-		"last_name": "Shriver",
-		"primary_card_holder": false
+		"accountNumber": "2097094104180012037",
+		"addressId": "466354",
+		"phoneId": "0",
+		"firstName": "M",
+		"lastName": "Shriver",
+		"primaryCardHolder": false
 	},
  	{
-		"account_number": "2097094104180012047",
-		"address_id": "466354",
-		"phone_id": "0",
-		"first_name": "M",
-		"last_name": "Shriver",
-		"primary_card_holder": false
+		"accountNumber": "2097094104180012047",
+		"addressId": "466354",
+		"phoneId": "0",
+		"firstName": "M",
+		"lastName": "Shriver",
+		"primaryCardHolder": false
 	},
  	{
-		"account_number": "2097094104180012023",
-		"address_id": "466354",
-		"phone_id": "0",
-		"first_name": "M",
-		"last_name": "Shriver",
-		"primary_card_holder": false
+		"accountNumber": "2097094104180012023",
+		"addressId": "466354",
+		"phoneId": "0",
+		"firstName": "M",
+		"lastName": "Shriver",
+		"primaryCardHolder": false
 	}
 	]
 }
@@ -1378,37 +1378,37 @@ HTTP/1.1 200 OK
 {
   ...
 
-  "batch_result":[
+  "batchResult":[
 	{
-		… <Success_body>
+		… <SuccessBody>
 	},
 	{
   		"name": "VALIDATION_ERROR",
    		"details": [
    		    {
-   		        "field": "#/credit_card/expire_month",
+   		        "field": "#/creditCard/expireMonth",
    		        "issue": "Required field is missing",
    		        "location": "body"
    		    }
    		],
-   		"debug_id": "123456789",
+   		"debugId": "123456789",
    		"message": "Invalid data provided",
-   		"information_link": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
+   		"informationLink": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
 	},
 
 	{
    		"name": "VALIDATION_ERROR",
    		"details": [
    		    {
-       	                "field":"#/credit_card/currency",
+       	                "field":"#/creditCard/currency",
                         "value":"XYZ",
                         "issue":"Currency code is invalid",
                         "location":"body"
                     }
    		],
-   		"debug_id": "123456789",
+   		"debugId": "123456789",
    		"message": "Invalid data provided",
-   		"information_link": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
+   		"informationLink": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
 	}
  ]
 }
@@ -1427,15 +1427,15 @@ HTTP/1.1 400 Bad Request
    "name": "VALIDATION_ERROR",
    "details": [
       {
-         "field": "#/credit_card/currency",
+         "field": "#/creditCard/currency",
          "value": "XYZ",
          "issue": "Currency code is invalid",
          "location": "body"
       }
    ],
-   "debug_id": "123456789",
+   "debugId": "123456789",
    "message": "Invalid data provided",
-   "information_link": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
+   "informationLink": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
 }
 ]
 ```
@@ -1466,36 +1466,36 @@ HTTP/1.1 200 OK
 
 [
 {
-	… <Success_body>
+	… <SuccessBody>
 },
 
 {
    "name": "VALIDATION_ERROR",
    "details": [
       {
-         "field": "/items/@account_number=='2097094104180012047'/address_id",
+         "field": "/items/@accountNumber=='2097094104180012047'/addressId",
          "issue": "Invalid Address Id for the account",
          "location": "body"
       }
    ],
-   "debug_id": "123456789",
+   "debugId": "123456789",
    "message": "Invalid data provided",
-   "information_link": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
+   "informationLink": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
 },
 
 {
    "name": "VALIDATION_ERROR",
    "details": [
    {
-       "field": "/items/@account_number=='2097094104180012023'/phone_id",
+       "field": "/items/@accountNumber=='2097094104180012023'/phoneId",
        "value": "XYZ",
        "issue": "Phone Id is invalid",
        "location": "body"
    }
    ],
-   "debug_id": "123456789",
+   "debugId": "123456789",
    "message": "Invalid data provided",
-   "information_link": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
+   "informationLink": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
 }
 ]
 
@@ -1511,36 +1511,36 @@ HTTP/1.1 200 OK
 
 [
 {
-	… <Success_body>
+	… <SuccessBody>
 },
 
 {
    "name": "VALIDATION_ERROR",
    "details": [
       {
-         "field": "/items/0/address_id",
+         "field": "/items/0/addressId",
          "issue": "Invalid Address Id for the account",
          "location": "body"
       }
    ],
-   "debug_id": "123456789",
+   "debugId": "123456789",
    "message": "Invalid data provided",
-   "information_link": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
+   "informationLink": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
 },
 
 {
    "name": "VALIDATION_ERROR",
    "details": [
    {
-       "field": "/items/2/phone_id",
+       "field": "/items/2/phoneId",
        "value": "XYZ",
        "issue": "Phone Id is invalid",
        "location": "body"
    }
    ],
-   "debug_id": "123456789",
+   "debugId": "123456789",
    "message": "Invalid data provided",
-   "information_link": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
+   "informationLink": "http://developer.foo.com/apidoc/blah#VALIDATION_ERROR"
 }
 ]
 

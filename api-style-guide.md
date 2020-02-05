@@ -781,7 +781,7 @@ See [HATEOAS Use Cases](patterns.md#hateoas-use-cases) to find where HATEOAS cou
 <h1 id="naming-conventions">Naming Conventions</h1>
 
 Naming conventions for URIs, query parameters, resources, fields and enums are described in this section. Let us emphasize here that these guidelines are less about following the conventions exactly as described here but they are more about defining some naming conventions and sticking to them in a consistent manner while designing APIs.
-We have [CamelCase](https://en.wikipedia.org/wiki/Camel_case) for field and file names.
+We have [camelCase](https://en.wikipedia.org/wiki/Camel_case) for field and file names.
 
 <h2 id="uri-component-names">URI Component Names</h2>
 
@@ -809,7 +809,7 @@ Following is a brief description of the URI specific naming convention guideline
 
 - URIs MUST start with a letter and use only lower-case letters.
 - Literals/expressions in URI paths SHOULD be separated using a hyphen ( - ).
-- Literals/expressions in query strings SHOULD be separated using underscore ( \_ ).
+- Literals/expressions in query strings SHOULD be camelCased.
 - URI paths and query strings MUST percent encode data into [UTF-8 octets](https://en.wikipedia.org/wiki/Percent-encoding).
 - Plural nouns SHOULD be used in the URI where appropriate to identify collections of data resources.
   - `/invoices`
@@ -867,13 +867,14 @@ When modeling a service as a set of resources, developers MUST follow these prin
     - `POST /charges` creates a new charge resource, `/charges/1234`
     - `GET /charges/1234` returns a full representation of a single charge
 - Resource names MUST be lower-case and use only alphanumeric characters and hyphens.
-  - The hyphen character, ( - ), MUST be used as a word separator in URI path literals. **Note** that this is the only place where hyphens are used as a word separator. In nearly all other situations, the underscore character, ( \_ ), MUST be used.
+  - The hyphen character, ( - ), MUST be used as a word separator in URI path literals. **Note** that this is the only
+    place where hyphens are used as a word separator. In nearly all other situations, camelCased words MUST be used.
 
 <h3 id="query-parameter-names">Query Parameter Names</h3>
 
-- Literals/expressions in query strings SHOULD be separated using underscore ( \_ ).
+- Literals/expressions in query strings SHOULD be camelCased.
 - Query parameters values MUST be percent-encoded.
-- Query parameters MUST start with a letter and SHOULD be all in lower case. Only alpha characters, digits and the underscore ( \_ ) character SHALL be used.
+- Query parameters MUST start with a letter. Only alpha characters (lower and upper), and digits SHALL be used.
 - Query parameters SHOULD be optional.
 - Some query parameter names are reserved, as indicated in [Resource Collections](#resource-collections).
 
@@ -883,7 +884,7 @@ For more specific info on the query parameter usage, see [URI Standards](#uri-st
 
 The data model for the representation MUST conform to [JSON][30]. The values may themselves be objects, strings, numbers, booleans, or arrays of objects.
 
-- Key names MUST camel cased words.
+- Key names MUST camelCased words.
   - `foo`
   - `barBaz`
 - Prefix such as `is` or `has` SHOULD NOT be used for keys of type boolean.
@@ -891,10 +892,10 @@ The data model for the representation MUST conform to [JSON][30]. The values may
 
 <h2 id="enum-names">Enum Names</h2>
 
-Entries (values) of an enum SHOULD be composed of only upper-case alphanumeric characters and the underscore character, ( \_ ).
+Entries (values) of an enum SHOULD be composed of only upper and lower case alphanumeric characters.
 
-- `FIELD_10`
-- `NOT_EQUAL`
+- `inProgress`
+- `FCA`
 
 If there is an industry standard that requires us to do otherwise, enums MAY contain other characters.
 
@@ -917,7 +918,7 @@ A link relation type represented by `rel` must be in lower-case.
 
 <h2 id="file-names">File Names </h2>
 
-JSON schema for various types used by API SHOULD each be contained in separate files, referenced using the `$ref` syntax (e.g. `"$ref":"object.json"`). JSON Schema files SHOULD use underscore naming syntax, e.g. `transaction_history.json`.
+JSON schema for various types used by API SHOULD each be contained in separate files, referenced using the `$ref` syntax (e.g. `"$ref":"object.json"`). JSON Schema files SHOULD use PascalCase naming syntax, e.g. `TransactionHistory.json`.
 
 <h1 id="uri">URI</h1>
 
