@@ -503,7 +503,7 @@ In cases where ETags are not available to provide concurrency protection when up
 - If the right hand operand of "==" is a string then it SHOULD NOT contain any of the following escape sequences: a Line Continuation or a Unicode Escape Sequence.
 - attribute-name is the name of the attribute to which a `PATCH` operation is applied if the filter condition is met.
 
-<h5 id="patchArrayExamples">PATCH Array Examples</h5>
+<h5 id="patch-array-examples">PATCH Array Examples</h5>
 
 **Example1:**
 
@@ -530,7 +530,7 @@ It is not necessary that an API support the updating of all attributes via a `PA
 
 See [Sample Input Validation Error Response](index.md#sampleresponse-multi) for examples of error handling.
 
-<h4 id="patchExamples">PATCH Examples</h4>
+<h4 id="patch-examples">PATCH Examples</h4>
 
 `PATCH` examples for modifying objects can be found in [RFC 6902][6].
 
