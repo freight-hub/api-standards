@@ -16,9 +16,9 @@ The words "REST" and "RESTful" MUST be written as presented here, representing t
 
 Machine-readable text, such as URLs, HTTP verbs, and source code, are represented using a fixed-width font.
 
-URIs containing variable blocks are specified according to [URI Template RFC 6570](https://tools.ietf.org/html/rfc6570). For example, a URL containing a variable called account_id would be shown as https://foo.com/accounts/{account_id}/.
+URIs containing variable blocks are specified according to [URI Template RFC 6570](https://tools.ietf.org/html/rfc6570). For example, a URL containing a variable called account_id would be shown as <https://foo.com/accounts/{account_id}/.>
 
-HTTP headers are written in camelCase + hyphenated syntax, e.g. Foo-Request-Id.
+HTTP headers are written in hyphenated syntax, e.g. Foo-Request-Id. Custom headers SHOULD NOT start with `X-`.
 
 ### Contributors
 
@@ -1020,7 +1020,7 @@ We have used OpenAPI wherever we need to describe the API specification througho
 
 **A note about using \$schema with OpenAPI**
 
-As of writing this (Q12017), OpenAPI tools DO NOT recognize `$schema` value and (incorrectly) assume the value of \$schema to be `http://swagger.io/v2/schema.json#` only. The following description applies to JSON schema (http://json-schema.org) used in API specification specified using specifications other than OpenAPI.
+As of writing this (Q12017), OpenAPI tools DO NOT recognize `$schema` value and (incorrectly) assume the value of \$schema to be `http://swagger.io/v2/schema.json#` only. The following description applies to JSON schema (<http://json-schema.org)> used in API specification specified using specifications other than OpenAPI.
 
 Use [\$schema](http://json-schema.org/latest/json-schema-core.html#anchor22) to indicate the version of JSON schema used by each JSON type you define as shown below.
 
