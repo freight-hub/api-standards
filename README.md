@@ -14,9 +14,9 @@ You can find the **JSON schema** spec [here](https://github.com/freight-hub/api-
 
 **Paths**: kebab case and plurals ✅ `purchase-orders` 🚫`purchaseOrder`, `purchaseOrders`, `purchase_orders`
 
-**Query Params**: camelCase ✅ `customerID` 🚫`customer-id`, `customer_id`
+**Query Params**: camelCase ✅ `customerID` 🚫`customer-id`, `customer_id`, `customerId`
 
-**Path Params**: camelCase ✅ `customerID` 🚫`customer-id`
+**Path Params**: camelCase ✅ `customerID` 🚫`customer-id`, `customerId`
 
 **Headers**: Pascal-Case, no X- for custom headers ✅ `API-Key` 🚫`api-key`, `apiKey`, `X-API-Key`
 
@@ -25,3 +25,5 @@ You can find the **JSON schema** spec [here](https://github.com/freight-hub/api-
 **Pagination**: must take `page` and `pageSize` parameters and response must contains a property `items` and should contain `totalItems` for the respones (also accepted is `totalPages`)
 
 **Enums**: must be camcelCase ✅ `green`, `blue`, `blueGreen` 🚫 `BLUE`, `blue_green`
+
+**Abbreviations/Acronyms**: must be all lower or all upper case  ✅ `HTTP`, `API`, `{ "id": 1 }` 🚫 `Http`, `Api`
