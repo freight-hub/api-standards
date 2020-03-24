@@ -13,8 +13,13 @@ You can find the **JSON schema** spec [here](https://github.com/freight-hub/api-
 ## TL;DR
 
 Paths: kebab case and plurals ✅ `purchase-orders` 🚫`purchaseOrder`, `purchaseOrders`, `purchase_orders`
+
 Query Params: camelCase ✅ `customerID` 🚫`customer-id`, `customer_id`
+
 Path Params: camelCase ✅ `customerID` 🚫`customer-id`
+
 Headers: Pascal-Case, no X- for custom headers ✅ `API-Key` 🚫`api-key`, `apiKey`, `X-API-Key`
+
 Responses: must be an object with camelCase properties ✅ `customerID`, `id` 🚫`customer-id`,`customerID`, `_id`
+
 Pagination: must take `page` and `pageSize` parameters and response must contains a property `items` and should contain `totalItems` for the respones (also accepted is `totalPages`)
