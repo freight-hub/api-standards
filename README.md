@@ -24,6 +24,8 @@ You can find the **JSON schema** spec [here](https://github.com/freight-hub/api-
 
 **Pagination**: must take `page` and `pageSize` parameters and response must contains a property `items` and should contain `totalItems` for the respones (also accepted is `totalPages`)
 
+**Sorting**: should take `sortOrder` as `asc` and `desc` as well as `sortBy` which should be a property of the resource
+
 **Enums**: must be camcelCase ✅ `green`, `blue`, `blueGreen` 🚫 `BLUE`, `blue_green`
 
 **Abbreviations/Acronyms**: must be all lower or all upper case  ✅ `HTTP`, `API`, `{ "id": 1 }` 🚫 `Http`, `Api`
