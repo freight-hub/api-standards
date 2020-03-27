@@ -28,4 +28,4 @@ You can find the **JSON schema** spec [here](https://github.com/freight-hub/api-
 
 **Enums**: must be camcelCase ✅ `green`, `blue`, `blueGreen` 🚫 `BLUE`, `blue_green`
 
-**Acronyms**: must be all lower or all upper case  ✅ `HTTP`, `API`, `{ "id": 1 }` 🚫 `Http`, `Api`
+**Acronyms**: must be all lower or all upper case  ✅ `HTTP`, `API`, `HTTPHeader`, `{ "httpHeader": "" }`, `{ "id": 1 }` 🚫 `Http`, `Api`
