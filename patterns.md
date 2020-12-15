@@ -482,6 +482,35 @@ The value of `path` is a string containing a [RFC 6901][3] JSON Pointer] that re
 }
 ```
 
+At Forto we decided to implement a variation of `a mixed PUT` in order to apply a `PATCH` action (search below for `Example Request (for mixed use of PUT)`). This means that if you want to modify one or more attributes from a resource but not all of them, you can request the change by sending a `PATCH` request with the attributes you want to modify.
+
+The difference between a `PATCH` and `PUT` method at Forto, is that while all the attributes are going to be overwritten with a `null` value when not present in the body of `PUT`, in the case of a `PATCH` they will keep the previous value.
+
+Below is a sample `PATCH` request to do partial updates to a resource, in this case, we want to update the `lastName` and `nickName`:
+
+```
+PATCH /v1/vault/customers/CUSTOMER-66W27667YB813414MKQ4AKDY
+{
+  "lastName": "Foo",
+  "nickName": "Bar"
+}
+```
+
+This request will update both attributes, leaving the ignored ones with the previous value.
+
+We could see this request as if it had `op=replace` and `path=/`, and the value being the body, for example:
+
+```
+PATCH /v1/vault/customers/CUSTOMER-66W27667YB813414MKQ4AKDY
+{
+    "op": "replace",
+    "path": "/",
+    "value": {
+        "lastName": "Foo",
+        "nickName": "Bar"
+    }
+}
+```
 #### `path` Parameter
 
 When JSON Pointer is used with arrays, concurrency protection is best implemented with ETags.
